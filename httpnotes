@@ -1,0 +1,11 @@
+HTTP API
+````````
+class HttpApi(im, opts)
+A helper class for making HTTP requests via the HTTP sandbox resource.
+
+Arguments:	
+im (InteractionMachine) – The interaction machine to use when making requests.
+opts.headers (object) – Default headers to use in HTTP requests.
+opts.auth (object) – Adds a HTTP Basic authentication to the default headers. Should contain username and password attributes.
+opts.verify_options (string) – The default list of options to verify when doing HTTPS requests. Optional.
+opts.ssl_method (string) – The default ssl method to attempt for HTTPS requests. Optional.
