@@ -6,30 +6,26 @@ from twisted.internet import reactor
 from twisted.internet.protocol import Protocol
 from twisted.internet.protocol import Factory
 
-"""What does this do?
-f = http.HTTPFactory()
-f.protocol = ProxyFactory"""
-
-
 # Set up proxy
 
 
 class ProxyFactory(http.HTTPFactory):
     def buildProtocol(self, addr):
+        CheckProxyRequest(addr)
         return proxy.Proxy()
 
 
 # My attempt to subclass proxyRequest
 
 
-class CheckProxyRequest(ProxyRequest):
+class CheckProxyRequest(ProxyRequest.path):
     def process(self):
         self.checkHeaders()
         return ProxyRequest.process(self)
+
     def checkHeaders(self):
         # how to read header and path?
-        self.requestHeaders
-
+        self.requestHeaders()
 
 
 """class ResourceFactory(Resource):
@@ -39,15 +35,12 @@ print site"""
 # Setting up server
 
 
-class QOTD(Protocol):
+class Proxy(Protocol):
     def connectionMade(self):
-        self.transport.write(ProxyRequest.path)
+        # self.transport.write(addr)
+        self.transport.write("Made it this far")
         self.transport.loseConnection()
 
-
-class QOTDFactory(Factory):
-    def buildProtocol(self, addr):
-        return QOTD()
 
 # Connect
 

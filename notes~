@@ -7,7 +7,7 @@ Research Twisted and Twisted for proxy
 
 Do a Twisted tutorial
 
-Figure out deferreds
+Figure out deferreds!
 
 chat to Colin and Jeremy about where this should be and how they would like it implemented
 
@@ -17,12 +17,15 @@ disallowed
 
 include domain names?
 
+set up and test with Travis
+
 //TASKS//
 
 1. Make a basic proxy DONE
 2. Make a logging proxy DONE
-3. Set up local proxy
+3. Set up local proxy DONE
 4. Make a proxy that logs and prints the http request
+"Subclass ProxyRequest to customize the way requests are processed or logged."
 5. Make a proxy that blocks Facebook
 6. Make a proxy that allows Facebook and blocks Twitter
 
