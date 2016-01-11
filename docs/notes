@@ -1,12 +1,6 @@
 White and blacklisting HTTP proxies
 ~~~~~~~~~~~~~~~~~
 
-Research HTTP requests and convention
-
-Research Twisted and Twisted for proxy
-
-Do a Twisted tutorial
-
 Figure out deferreds
 
 chat to Colin and Jeremy about where this should be and how they would like it implemented
@@ -23,7 +17,7 @@ set up and test with Travis
 
 1. Make a basic proxy DONE
 2. Make a logging proxy DONE
-3. Set up local proxy
+3. Set up local proxy DONE
 4. Make a proxy that logs and prints the http request
 5. Make a proxy that blocks Facebook
 6. Make a proxy that allows Facebook and blocks Twitter
@@ -115,6 +109,7 @@ reactor.run()
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 //QUESTIONS//
-. what server architecture would this run on
-. what port on the server
-. how to determine internal sites. that technology?
+. how to determine internal ips. that technology?
+. I'm pretty sure I'm using virtualenv wrong...
+
+Site objects serve as the glue between a port to listen for HTTP requests on, and a root Resource object.
