@@ -5,11 +5,9 @@ Figure out deferreds
 
 chat to Colin and Jeremy about where this should be and how they would like it implemented
 
-List of allowed ips
+Blacklist ips
 
 disallowed
-
-include domain names?
 
 set up and test with Travis
 
@@ -19,8 +17,7 @@ set up and test with Travis
 2. Proxy with Travis
 3. Twisted trial tests
 
-
 //QUESTIONS//
+. What to put in the blacklist.py, how to test this
 . how to determine internal ips. that technology?
-. I'm pretty sure I'm using virtualenv wrong...
 

@@ -14,10 +14,10 @@ class CheckProxyRequestTestCase(unittest.TestCase):
         self.proto.dataReceived('%s %d %d\r\n' % (operation))
         self.assertEqual(int(self.tr.value()), expected)
 
-    def test_buildProtocol(self, addr):
-        cfactory = ProxyFactory()
-        result = ProxyFactory.buildProtocol()
-        self.assertEqual(result, "something")
+    def test_failure(self):
+        conn = factory.buildProtocol('127.0.0.1', 0)
+        # how is this supposed to fail?
+        return self.assertFailure(d, ConnectionRefusedError)
 
     def test_process(self):
         checkRequest = CheckProxyRequest()

@@ -1,13 +1,11 @@
 White and blacklisting HTTP proxies
 ~~~~~~~~~~~~~~~~~
 
-Figure out deferreds
-
 chat to Colin and Jeremy about where this should be and how they would like it implemented
 
 Blacklist ips
 
-disallowed
+deferreds if necessary
 
 set up and test with Travis
 
