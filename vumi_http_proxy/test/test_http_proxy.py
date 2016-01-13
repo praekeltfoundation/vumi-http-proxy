@@ -1,24 +1,32 @@
-from vumi_http_proxy.http_proxy_remote_helper import RemoteFactory
 from twisted.trial import unittest
 from twisted.test import proto_helpers
 
+from vumi_http_proxy.http_proxy import ProxyFactory
+
 
 class CheckProxyRequestTestCase(unittest.TestCase):
+
     def setUp(self):
-        factory = RemoteFactory()
+        factory = ProxyFactory()
         self.proto = factory.buildProtocol(('0.0.0.0', 0))
         self.tr = proto_helpers.StringTransport()
         self.proto.makeConnection(self.tr)
 
-    def _test(self, expected):
-        self.assertEqual(self.tr.value(), expected)
-
-    def _test_failure(self):
-        conn = factory.buildProtocol('127.0.0.1', 0)
-        return self.assertFailure(d, ConnectionRefusedError)
-
     def test_process(self):
-        return self._test('zombo.com')
+        self.proto.dataReceived("\r\n".join([
+            "GET http://zombo.com/ HTTP/1.1",
+            "Host: zombo.com",
+            "",
+            "",
+        ]))
 
-    def test_errorProcess(self):
-        return self._test_failure()
+        self.assertEqual(self.tr.value(), "\r\n".join([
+            "HTTP/1.1 200 OK",
+            "Transfer-Encoding: chunked",
+            "",
+            "13",
+            "<html>Denied</html>",
+            "0",
+            "",
+            "",
+        ]))
