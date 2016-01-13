@@ -44,11 +44,11 @@ class Proxy(proxy.Proxy):
 
 
 # Connect
-
-endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
-# ERR couldn't listen on 0.0.0.0:80 permission denied
-endpoint.listen(ProxyFactory())
-reactor.run()
+if __name__ == '__main__':
+    endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
+    # ERR couldn't listen on 0.0.0.0:80 permission denied
+    endpoint.listen(ProxyFactory())
+    reactor.run()
 
 # TODO include timeOut = no of seconds and then resetTimeout
 # TODO include blacklist of ips in new file
