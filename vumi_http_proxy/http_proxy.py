@@ -1,5 +1,3 @@
-# -*- test-case-name: vumi_http_proxy.test.test_http_proxy -*-
-
 from twisted.web import http, proxy
 from twisted.internet import reactor, defer
 from twisted.internet.protocol import Factory
