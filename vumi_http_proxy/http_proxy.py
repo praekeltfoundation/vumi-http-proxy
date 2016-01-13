@@ -31,7 +31,7 @@ class ProxyClientFactory(proxy.ProxyClientFactory):
 class CheckProxyRequest(proxy.ProxyRequest):
     def process(self):
         if self.getAllHeaders()['host'] in blacklist:
-            # print "Blocked"
+            self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()
             return
@@ -46,7 +46,6 @@ class Proxy(proxy.Proxy):
 # Connect
 if __name__ == '__main__':
     endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
-    # ERR couldn't listen on 0.0.0.0:80 permission denied
     endpoint.listen(ProxyFactory())
     reactor.run()
 
