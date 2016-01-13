@@ -13,6 +13,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+_trial_temp*/
 docs/notes.txt
 eggs/
 .eggs/
