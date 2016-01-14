@@ -1,0 +1,17 @@
+White and blacklisting HTTP proxies
+~~~~~~~~~~~~~~~~~
+
+TOMORROW:
+Open a ticket for https
+Figure out how to make http proxy work for https
+Make some tests for https too
+
+
+//TODAY'S QUESTIONS//
+
+what should be in blacklist.py
+how do i test what is in blacklist.py
+is there a specific testing layout i should be using.
+
+
+
