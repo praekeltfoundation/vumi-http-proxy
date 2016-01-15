@@ -7,12 +7,29 @@ from twisted.web.resource import Resource
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
-blacklist = ["facebook.com", "twitter.com", "zombo.com"]
+DEFAULT_BLACKLIST = ["facebook.com", "twitter.com", "zombo.com"]
+
 
 #  Set up proxy
 
 
 class ProxyFactory(http.HTTPFactory):
+
+    def __init__(self, blacklist):
+        http.HTTPFactory.__init__(self)
+        self.blacklist = blacklist
+
+    def buildProtocol(self, addr):
+        return Proxy(self.blacklist)
+
+
+# Check request
+class CheckProxyRequest(proxy.ProxyRequest):
+    def process(self):
+        host, _, port = self.getAllHeaders()['host'].partition(':')
+        if host in self.channel.blacklist:
+            self.setResponseCode(400)
+
     def buildProtocol(self, addr):
         return Proxy()
 
@@ -32,6 +49,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
     def process(self):
         if self.getAllHeaders()['host'] in blacklist:
             # print "Blocked"
+
             self.write("<html>Denied</html>")
             self.finish()
             return
@@ -40,17 +58,31 @@ class CheckProxyRequest(proxy.ProxyRequest):
 
 
 class Proxy(proxy.Proxy):
+
+
+    requestFactory = CheckProxyRequest
+
+    def __init__(self, blacklist):
+        proxy.Proxy.__init__(self)
+        self.blacklist = blacklist
+
+
+# Connect
+if __name__ == '__main__':
+    factory = ProxyFactory(DEFAULT_BLACKLIST)
+    endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
+    endpoint.listen(factory)
+    reactor.run()
+
+# TODO include blacklist of ips in new file
     requestFactory = CheckProxyRequest
 
 
 # Connect
 
 endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
-# ERR couldn't listen on 0.0.0.0:80 permission denied
 endpoint.listen(ProxyFactory())
 reactor.run()
 
-# TODO include timeOut = no of seconds and then resetTimeout
 # TODO include blacklist of ips in new file
-# TODO Make deferreds
 # TODO make ok for http and https
