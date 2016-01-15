@@ -9,12 +9,10 @@ from vumi_http_proxy.http_proxy import ProxyFactory
 
 from .helpers import HttpTestServer, DEFAULT_TIMEOUT
 
-timeout = DEFAULT_TIMEOUT
 
+class TestProxyToLocalServer(unittest.TestCase):
 
-class ProxyToLocalServerTestCase(unittest.TestCase):
-
-    timeout
+    timeout = DEFAULT_TIMEOUT
 
     def setUp(self):
         self.server = HttpTestServer(self)
@@ -54,9 +52,9 @@ class ProxyToLocalServerTestCase(unittest.TestCase):
             ['127.0.0.1'], 400, "<html>Denied</html>")
 
 
-class CheckProxyRequestTestCase(unittest.TestCase):
+class TestCheckProxyRequest(unittest.TestCase):
 
-    timeout
+    timeout = DEFAULT_TIMEOUT
 
     def setUp(self):
         factory = ProxyFactory(['zombo.com'])

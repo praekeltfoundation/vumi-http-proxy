@@ -1,0 +1,18 @@
+White and blacklisting HTTP proxies
+~~~~~~~~~~~~~~~~~
+
+TOMORROW:
+Ask if this is enough tests
+Push, finish pull request
+Open a ticket for https
+
+What to do next?
+Make blacklist.py
+Tests for blacklist.py
+
+
+Agent is responsible for resolving the hostname into an IP address and 
+connecting to it on port 80 (for HTTP URIs), port 443 (for HTTPS URIs), 
+or on the port number specified in the URI itself. It is also responsible 
+for cleaning up the connection afterwards.
+
