@@ -28,5 +28,4 @@ class ProxyWorkerServiceMaker(object):
         endpoint = serverFromString(
             reactor, "tcp:%d:interface=%s" % (options["port"],
                                               str(options["interface"])))
-        endpoint.listen(factory)
         return endpoint.listen(factory)
