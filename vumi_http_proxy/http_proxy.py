@@ -1,9 +1,6 @@
 from twisted.web import http, proxy
-from twisted.internet import reactor, defer
-from twisted.internet.protocol import Factory
+from twisted.internet import reactor
 from twisted.internet.endpoints import serverFromString
-from twisted.web import server
-from twisted.web.resource import Resource
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
@@ -51,6 +48,3 @@ if __name__ == '__main__':
     endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
     endpoint.listen(factory)
     reactor.run()
-
-# TODO include blacklist of ips in new file
-# TODO make ok for http and https
