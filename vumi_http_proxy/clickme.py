@@ -12,7 +12,3 @@ def cli(interface, port):
     i = http_proxy.Initialize(["asdf.com"], str(interface), port)
     click.echo("Starting connection to %s:%d" % (str(interface), port))
     i.main()
-
-
-if __name__ == '__main__':
-    cli()
