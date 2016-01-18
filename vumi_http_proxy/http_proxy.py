@@ -6,7 +6,6 @@ from twisted.internet.endpoints import serverFromString
 
 DEFAULT_BLACKLIST = ["facebook.com", "twitter.com", "zombo.com"]
 
-
 #  Set up proxy
 
 
@@ -42,9 +41,17 @@ class Proxy(proxy.Proxy):
         self.blacklist = blacklist
 
 
-# Connect
-if __name__ == '__main__':
-    factory = ProxyFactory(DEFAULT_BLACKLIST)
-    endpoint = serverFromString(reactor, "tcp:8080:interface=0.0.0.0")
-    endpoint.listen(factory)
-    reactor.run()
+class Initialize(object):
+    def __init__(self, blacklist, ip, port):
+        if not blacklist:
+            blacklist = DEFAULT_BLACKLIST
+        self.blacklist = blacklist
+        self.ip = ip
+        self.port = port
+
+    def main(self):
+        factory = ProxyFactory(self.blacklist)
+        endpoint = serverFromString(
+            reactor, "tcp:%d:interface=%s" % (self.port, self.ip))
+        endpoint.listen(factory)
+        reactor.run()
