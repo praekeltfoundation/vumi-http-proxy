@@ -15,7 +15,7 @@ dist/
 downloads/
 _trial_temp*/
 docs/notes.txt
-twisted/plugings/dropin.cache
+twisted/plugins/dropin.cache
 eggs/
 .eggs/
 lib/
