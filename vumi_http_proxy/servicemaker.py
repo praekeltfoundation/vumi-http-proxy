@@ -6,10 +6,7 @@ from twisted.python import usage
 from twisted.plugin import IPlugin
 from twisted.application.service import IServiceMaker
 from twisted.internet.endpoints import serverFromString
-from twisted.internet import reactor, protocol
-from twisted.application.service import Application
-
-from twisted.application.internet import StreamServerEndpointService
+from twisted.internet import reactor
 from vumi_http_proxy.http_proxy import ProxyFactory
 
 
@@ -27,12 +24,22 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         """ Call Initialize to start endpoint server """
-        application = Application("Demo application")
         factory = ProxyFactory(["asdf.com"])
-        factory.protocol = protocol.Protocol
         endpoint = serverFromString(
             reactor, "tcp:%d:interface=%s" % (
                 options["port"], str(options["interface"])))
+        # import pdb; pdb.set_trace()
+        endpoint.listen(factory)
+        # What oh what do I return?
+        return endpoint
+        # ERR: AttributeError: 'TCP4ServerEndpoint' object has no
+        # attribute 'setServiceParent'
+        # egs of what has been returned in other examples:
+        # return internet.TCPServer(int(options["port"]), MyFactory())
+        # no return, but: service.setServiceParent(application)
+        # another one has: service = StreamServerEndpointService(endpoint,
+        # factory)
+        # ... service.setServiceParent(application)
+        # But ^ is in a .tac file.
 
-        service = StreamServerEndpointService(endpoint, factory)
-        return service.setServiceParent(application)
+serviceMaker = ProxyWorkerServiceMaker()
