@@ -1,6 +1,6 @@
 from twisted.web import http, proxy
-# from twisted.internet import reactor
-# from twisted.internet.endpoints import serverFromString
+from twisted.internet import reactor
+from twisted.internet.endpoints import serverFromString
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
@@ -39,7 +39,7 @@ class Proxy(proxy.Proxy):
     def __init__(self, blacklist):
         proxy.Proxy.__init__(self)
 
-"""
+
 class Initialize(object):
     def __init__(self, blacklist, ip, port):
         if not blacklist:
@@ -54,4 +54,3 @@ class Initialize(object):
             reactor, "tcp:%d:interface=%s" % (self.port, self.ip))
         endpoint.listen(factory)
         reactor.run()
-"""

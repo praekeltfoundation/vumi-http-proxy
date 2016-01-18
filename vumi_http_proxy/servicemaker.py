@@ -4,8 +4,11 @@ from zope.interface import implements
 
 from twisted.python import usage
 from twisted.plugin import IPlugin
+from twisted.application import internet
 from twisted.application.service import IServiceMaker
 from vumi_http_proxy.http_proxy import ProxyFactory
+
+from twisted.application.service import Application
 from twisted.internet.endpoints import serverFromString
 from twisted.internet import reactor
 
@@ -24,8 +27,12 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         """ Call Initialize to start endpoint server """
+        application = Application("basic AMP server")
+
         factory = ProxyFactory(["asdf.com"])
         endpoint = serverFromString(
-            reactor, "tcp:%d:interface=%s" % (options["port"],
-                                              str(options["interface"])))
-        return endpoint.listen(factory)
+            reactor, "tcp:%d:interface=%s" % (
+                options["port"], str(["self.ip"])))
+        reactor.run()
+        service = internet.StreamServerEndpointService(endpoint, factory)
+        return service.setServiceParent(application)
