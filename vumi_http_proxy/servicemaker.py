@@ -27,7 +27,6 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         """ Call Initialize to start endpoint server """
-        application = Application("basic AMP server")
 
         factory = ProxyFactory(["asdf.com"])
         endpoint = serverFromString(
@@ -35,4 +34,4 @@ class ProxyWorkerServiceMaker(object):
                 options["port"], str(["self.ip"])))
         reactor.run()
         service = internet.StreamServerEndpointService(endpoint, factory)
-        return service.setServiceParent(application)
+        return service.setServiceParent()

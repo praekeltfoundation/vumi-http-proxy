@@ -38,6 +38,7 @@ class Proxy(proxy.Proxy):
 
     def __init__(self, blacklist):
         proxy.Proxy.__init__(self)
+        self.blacklist = blacklist
 
 
 class Initialize(object):
