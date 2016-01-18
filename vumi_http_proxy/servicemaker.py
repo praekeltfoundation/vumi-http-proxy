@@ -8,7 +8,6 @@ from twisted.application import internet
 from twisted.application.service import IServiceMaker
 from vumi_http_proxy.http_proxy import ProxyFactory
 
-from twisted.application.service import Application
 from twisted.internet.endpoints import serverFromString
 from twisted.internet import reactor
 
@@ -32,6 +31,5 @@ class ProxyWorkerServiceMaker(object):
         endpoint = serverFromString(
             reactor, "tcp:%d:interface=%s" % (
                 options["port"], str(["self.ip"])))
-        reactor.run()
         service = internet.StreamServerEndpointService(endpoint, factory)
-        return service.setServiceParent()
+        return service.startService()
