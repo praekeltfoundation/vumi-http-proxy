@@ -17,7 +17,7 @@ class Options(usage.Options):
 
 class ProxyWorkerServiceMaker(object):
     implements(IServiceMaker, IPlugin)
-    tapname = "proxy_worker"
+    tapname = "vumi_http_proxy"
     description = "Service maker to launch proxy from given port and ip addr"
     options = Options
 
