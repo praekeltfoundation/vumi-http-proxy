@@ -13,6 +13,8 @@ class Options(usage.Options):
     optParameters = [["port", None, 8080,
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"]]
+    optFlags = [["--port", "-p", "The port number to start the proxy"],
+                ["--interface", "-i", "IP to start proxy on"]]
 
 
 class ProxyWorkerServiceMaker(object):
@@ -22,7 +24,6 @@ class ProxyWorkerServiceMaker(object):
     options = Options
 
     def makeService(self, options):
-        """ Call Initialize to start endpoint server """
         factory = ProxyFactory(["asdf.com"])
         return strports.service("tcp:%d:interface=%s" % (
                 options["port"], str(options["interface"])), factory)
