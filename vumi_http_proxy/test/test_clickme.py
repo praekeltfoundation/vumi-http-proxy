@@ -12,7 +12,6 @@ class TestClickMe(unittest.TestCase):
         self.initializers = []
         self.patch(http_proxy.Initialize, 'main',
                    lambda x: self.initializers.append(x))
-        # import pdb; pdb.set_trace()
         result = runner.invoke(clickme.cli)
         [initializer] = self.initializers
         self.assertEqual(result.exit_code, 0)
