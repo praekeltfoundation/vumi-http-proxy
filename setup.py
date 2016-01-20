@@ -17,11 +17,15 @@ setup(
     author="Praekelt Foundation",
     author_email='dev@praekeltfoundation.org',
     url='https://github.com/praekelt/vumi-http-proxy',
-    packages=find_packages(),
+    packages=find_packages() + [
+        'twisted.plugins',
+    ],
+    package_data={'twisted.plugins': ['twisted/plugins/*.py']},
     include_package_data=True,
     install_requires=[
-         'Click',
-         'Twisted',
+        'zope.interface',
+        'Click',
+        'Twisted',
     ],
     entry_points='''
         [console_scripts]
