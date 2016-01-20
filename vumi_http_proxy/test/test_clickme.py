@@ -11,4 +11,7 @@ class TestClickMe(unittest.TestCase):
         runner = CliRunner()
         clickme.test = True
         result = runner.invoke(clickme.cli)
-        assert 'Starting connection to 0.0.0.0:8080' in result.output
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(str(result.output).splitlines()[0], (
+                         'Starting connection to 0.0.0.0:8080'
+                         ))
