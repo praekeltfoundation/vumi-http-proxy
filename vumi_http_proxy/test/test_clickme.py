@@ -9,10 +9,14 @@ from twisted.trial import unittest
 class TestClickMe(unittest.TestCase):
     def test_click(self):
         runner = CliRunner()
+        self.initializers = []
         self.patch(http_proxy.Initialize, 'main',
-                   lambda x: x)
+                   lambda x: self.initializers.append(x))
+        # import pdb; pdb.set_trace()
         result = runner.invoke(clickme.cli)
+        [initializer] = self.initializers
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.output.splitlines(), [
            'Starting connection to 0.0.0.0:8080',
         ])
+        self.assertEquals(type(initializer), http_proxy.Initialize)
