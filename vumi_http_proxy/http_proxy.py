@@ -1,6 +1,5 @@
-import sys
 from twisted.web import http, proxy
-from twisted.internet import reactor, defer
+from twisted.internet import reactor
 from twisted.internet.endpoints import serverFromString
 from twisted.names import client
 
@@ -28,12 +27,13 @@ class CheckProxyRequest(proxy.ProxyRequest):
         host, _, port = self.getAllHeaders()['host'].partition(':')
         self.d = client.getHostByName(host)
         self.d.addCallback(self.setIP, host)
+        self.d.addErrback(printError)
 
     def setIP(self, ip_addr, host):
         if ip_addr:
             self.compare(str(ip_addr))
-            sys.stdout.write(ip_addr + '\n')
         else:
+            import sys
             sys.stderr.write(
                 'ERROR: No IP adresses found for name %r\n' % (host))
 
@@ -46,6 +46,11 @@ class CheckProxyRequest(proxy.ProxyRequest):
             return
         # else allow access to site
         return proxy.ProxyRequest.process(self)
+
+
+def printError(failure):
+    import sys
+    sys.stderr.write(str(failure))
 
 
 class Proxy(proxy.Proxy):
