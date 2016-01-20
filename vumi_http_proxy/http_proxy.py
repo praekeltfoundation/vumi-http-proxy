@@ -1,10 +1,13 @@
+import sys
 from twisted.web import http, proxy
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 from twisted.internet.endpoints import serverFromString
+from twisted.names import client
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
 DEFAULT_BLACKLIST = ["facebook.com", "twitter.com", "zombo.com"]
+BLACKLIST_IPS = ["69.16.230.117", "93.184.216.34"]
 
 #  Set up proxy
 
@@ -23,7 +26,20 @@ class ProxyFactory(http.HTTPFactory):
 class CheckProxyRequest(proxy.ProxyRequest):
     def process(self):
         host, _, port = self.getAllHeaders()['host'].partition(':')
-        if host in self.channel.blacklist:
+        self.d = client.getHostByName(host)
+        self.d.addCallback(self.setIP, host)
+
+    def setIP(self, ip_addr, host):
+        if ip_addr:
+            self.compare(str(ip_addr))
+            sys.stdout.write(ip_addr + '\n')
+        else:
+            sys.stderr.write(
+                'ERROR: No IP adresses found for name %r\n' % (host))
+
+    def compare(self, ip_addr):
+        if ip_addr in BLACKLIST_IPS:
+            # self.channel.blacklist:
             self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()
