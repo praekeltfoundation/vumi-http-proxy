@@ -6,8 +6,8 @@ from twisted.names import client
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
-DEFAULT_BLACKLIST = ["facebook.com", "twitter.com", "zombo.com"]
-BLACKLIST_IPS = ["69.16.230.117", "93.184.216.34"]
+BLACKLIST_HOSTS = ["facebook.com", "twitter.com", "zombo.com"]
+DEFAULT_BLACKLIST = ["69.16.230.117"]
 
 #  Set up proxy
 
@@ -26,27 +26,32 @@ class ProxyFactory(http.HTTPFactory):
 class CheckProxyRequest(proxy.ProxyRequest):
     def process(self):
         host, _, port = self.getAllHeaders()['host'].partition(':')
-        d = client.getHostByName(host)
-        d.addCallback(self.setIP, host)
-        d.addErrback(log.err)
-        return d
+        d = client.getHostByName(str(host))
+        d.addCallback(self.setIP, str(host))
+        d.addErrback(self.handleError)
+
+    def handleError(self, failure):
+        log.err(failure)
+        self.setResponseCode(400)
+        self.write("<html>Denied</html>")
+        self.finish()
+        return
 
     def setIP(self, ip_addr, host):
-        if ip_addr:
-            self.compare(str(ip_addr))
-        else:
-            self.write("<html>ERROR: No IP adresses found for name %r" %
-                       (host) + " </html>")
-            self.finish
-
-    def compare(self, ip_addr):
-        if ip_addr in BLACKLIST_IPS:
-            # self.channel.blacklist:
+        print ip_addr
+        print "!!"+self.channel.blacklist[0]
+        if ip_addr in DEFAULT_BLACKLIST:
+            print "IN"
             self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()
             return
-        # else allow access to site
+        elif ip_addr is None:
+            print "ERR"
+            self.write("<html>ERROR: No IP adresses found for name %r" %
+                       host + " </html>")
+            self.finish()
+            return
         return proxy.ProxyRequest.process(self)
 
 
