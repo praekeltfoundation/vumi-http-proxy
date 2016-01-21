@@ -19,5 +19,5 @@ class TestClickMe(unittest.TestCase):
            'Starting connection to 0.0.0.0:8080',
         ])
         self.assertEquals(type(initializer), http_proxy.Initialize)
-        self.assertEquals(clickme.cli.port, 8080)
-        self.assertEquals(clickme.cli.interface, "0.0.0.0")
+        self.assertEquals(initializer.port, 8080)
+        self.assertEquals(initializer.ip, "0.0.0.0")
