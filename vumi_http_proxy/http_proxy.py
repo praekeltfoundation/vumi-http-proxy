@@ -36,7 +36,6 @@ class CheckProxyRequest(proxy.ProxyRequest):
         return d
 
     def handleError(self, failure):
-        print "IPP"
         log.err(failure)
         self.setResponseCode(400)
         self.write("<html>Denied</html>")
@@ -104,6 +103,7 @@ class Proxy(proxy.Proxy):
 
 
 class Initialize(object):
+
     def __init__(self, blacklist, ip, port):
         if not blacklist:
             blacklist = DEFAULT_BLACKLIST
