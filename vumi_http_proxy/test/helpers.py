@@ -66,6 +66,9 @@ class TestInitialize(object):
         self.addCleanup(server.stopListening)
         returnValue(server.getHost().port)
 
+    def getServer(self):
+        return server
+
 
 class TestInitializeSTR(object):
     def main(self):

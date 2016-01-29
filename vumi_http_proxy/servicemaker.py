@@ -7,6 +7,9 @@ from twisted.plugin import IPlugin
 from twisted.application.service import IServiceMaker
 from twisted.application import strports
 from vumi_http_proxy.http_proxy import ProxyFactory
+from twisted.names import client
+from twisted.web.client import Agent
+from twisted.internet import reactor
 
 
 class Options(usage.Options):
@@ -24,6 +27,7 @@ class ProxyWorkerServiceMaker(object):
     options = Options
 
     def makeService(self, options):
-        factory = ProxyFactory(["asdf.com"])
+        factory = ProxyFactory(
+            ["asdf.com"], client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
                 options["port"], str(options["interface"])), factory)
