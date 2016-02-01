@@ -28,6 +28,6 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         factory = ProxyFactory(
-            ["asdf.com"], client.createResolver(), Agent(reactor))
+            ["zombo.com"], client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
                 options["port"], str(options["interface"])), factory)

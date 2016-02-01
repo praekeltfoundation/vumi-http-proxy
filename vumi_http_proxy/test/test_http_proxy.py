@@ -30,9 +30,6 @@ class TestCheckProxyRequest(unittest.TestCase):
         client_endpoint = clientFromString(
             reactor, "tcp:host=localhost:port=%s" % (proxy_port,))
         agent = ProxyAgent(client_endpoint)
-        """self.patch(
-            CheckProxyRequest, 'sendResponseBack',
-            TestSendResponseBack)"""
         response = yield agent.request("GET", url)
         body = yield readBody(response)
         returnValue((response, body))

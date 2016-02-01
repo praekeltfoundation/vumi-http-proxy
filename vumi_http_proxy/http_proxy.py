@@ -72,8 +72,8 @@ class CheckProxyRequest(proxy.ProxyRequest):
         self.setResponseCode(r.code)
         for key, value in r.headers.getAllRawHeaders():
             self.responseHeaders.addRawHeader(key, value)
+        # gets this far
         body = yield readBody(r)
-        print "HERE"
         print body
         self.write(body)
         self.finish()
