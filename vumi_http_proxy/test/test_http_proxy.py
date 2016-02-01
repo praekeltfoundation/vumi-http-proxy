@@ -18,9 +18,9 @@ class TestCheckProxyRequest(unittest.TestCase):
         # self.patch(http_proxy.Initialize, 'main', TestInitialize)
         resolver = TestResolver()
         http_client = TestAgent()
-        proxy = ProxyFactory(['69.16.230.117'], resolver, http_client)
+        proxy = ProxyFactory(blacklist, resolver, http_client)
         server_endpoint = serverFromString(
-            reactor, "tcp:0:interface=127.0.0.1")
+            reactor, "tcp:8080:interface=127.0.0.1")
         self.server = yield server_endpoint.listen(proxy)
         self.addCleanup(self.server.stopListening)
         returnValue(self.server.getHost().port)
@@ -45,7 +45,8 @@ class TestCheckProxyRequest(unittest.TestCase):
 
     def test_badIP(self):
         return self.check_proxy_request(
-            [], '', 400, "<html>ERROR: No IP adresses found for name </html>")
+            [], '', 400,
+            "<html>ERROR: No IP adresses found for name '' </html>")
 
     def test_denyIP(self):
         return self.check_proxy_request(
@@ -53,4 +54,4 @@ class TestCheckProxyRequest(unittest.TestCase):
 
     def test_allowIP(self):
         return self.check_proxy_request(
-            [], '127.0.0.1', 200, '<html>Allowed</html>')
+            ['69.16.230.117'], 'zombie.com', 200, '<html>Allowed</html>')

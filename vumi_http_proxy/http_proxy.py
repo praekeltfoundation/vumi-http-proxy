@@ -9,7 +9,6 @@ from twisted.internet.defer import inlineCallbacks, succeed
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
-BLACKLIST_HOSTS = ["facebook.com", "twitter.com", "zombo.com"]
 DEFAULT_BLACKLIST = ["69.16.230.117"]
 
 #  Set up proxy
@@ -44,6 +43,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
 
     def setIP(self, ip_addr, host):
         if not ip_addr:
+            self.setResponseCode(400)
             self.write("<html>ERROR: No IP adresses found for name %r" %
                        host + " </html>")
             self.finish()

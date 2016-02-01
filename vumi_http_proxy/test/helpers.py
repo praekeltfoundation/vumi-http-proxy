@@ -1,5 +1,5 @@
 from twisted.web import server, resource
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 from twisted.internet.defer import inlineCallbacks, returnValue, succeed
 from twisted.internet.endpoints import serverFromString
 from twisted.test import proto_helpers
@@ -8,7 +8,8 @@ from vumi_http_proxy.http_proxy import ProxyFactory
 
 DEFAULT_TIMEOUT = 2
 hostnames = {'zombo.com': '69.16.230.117',
-             'zombie.com': '66.96.162.142'}
+             'zombie.com': '66.96.162.142',
+             '127.0.0.1': '127.0.0.1'}
 
 
 class HttpTestResource(resource.Resource):
@@ -44,8 +45,10 @@ class TestResolver(object):
         self.hostnames = hostnames
 
     def getHostByName(self, name, timeout=None, effort=10):
-        self.hostnames.get(name)
-        return succeed
+        d = defer.Deferred()
+        ip = self.hostnames.get(name)
+        reactor.callLater(0.5, d.callback, ip)
+        return d
 
 
 class TestAgent(object):
