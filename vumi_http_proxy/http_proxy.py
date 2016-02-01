@@ -47,16 +47,18 @@ class CheckProxyRequest(proxy.ProxyRequest):
             self.write("<html>ERROR: No IP adresses found for name %r" %
                        host + " </html>")
             self.finish()
+            return
         if ip_addr in DEFAULT_BLACKLIST:
             self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()
             return
-        uri = self.replaceHostWithIP(self.uri, ip_addr)
-        headers = self.requestHeaders
-        d = self.channel.http_client.request(
-            self.method, uri, headers, StringProducer(self.content.read()))
-        d.addCallback(self.sendResponseBack)
+        else:
+            uri = self.replaceHostWithIP(self.uri, ip_addr)
+            headers = self.requestHeaders
+            d = self.channel.http_client.request(
+                self.method, uri, headers, StringProducer(self.content.read()))
+            d.addCallback(self.sendResponseBack)
 
     def replaceHostWithIP(self, uri, ip_addr):
         scheme, netloc, path, params, query, fragment = urlparse(uri)

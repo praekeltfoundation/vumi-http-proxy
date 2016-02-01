@@ -40,7 +40,7 @@ class HttpTestServer(object):
 
 
 class TestResolver(object):
-    def __init__(self, hostnames):
+    def __init__(self):
         self.hostnames = hostnames
 
     def getHostByName(self, name, timeout=None, effort=10):
