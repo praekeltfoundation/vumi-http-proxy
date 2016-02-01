@@ -47,14 +47,15 @@ class TestResolver(object):
     def getHostByName(self, name, timeout=None, effort=10):
         d = defer.Deferred()
         ip = self.hostnames.get(name)
-        reactor.callLater(0.5, d.callback, ip)
+        reactor.callLater(0.1, d.callback, ip)
         return d
 
 
 class TestAgent(object):
     def request(self, method, uri, headers, bodyProducer):
-        # ?
-        return succeed
+        d = defer.Deferred()
+        reactor.callLater(0.1, d.callback, "<html>Allowed</html>")
+        return d
 
 
 class TestInitialize(object):

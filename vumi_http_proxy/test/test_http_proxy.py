@@ -3,7 +3,7 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 from twisted.internet.endpoints import clientFromString, serverFromString
 from twisted.web.client import ProxyAgent, readBody
 from twisted.trial import unittest
-from vumi_http_proxy.http_proxy import ProxyFactory
+from vumi_http_proxy.http_proxy import ProxyFactory, CheckProxyRequest
 from .helpers import DEFAULT_TIMEOUT, TestResolver, TestAgent, HttpTestServer
 
 
@@ -30,6 +30,8 @@ class TestCheckProxyRequest(unittest.TestCase):
         client_endpoint = clientFromString(
             reactor, "tcp:host=localhost:port=%s" % (proxy_port,))
         agent = ProxyAgent(client_endpoint)
+        # self.patch(CheckProxyRequest(), 'sendResponseBack',
+        #  TestSendResponseBack())
         response = yield agent.request("GET", url)
         body = yield readBody(response)
         returnValue((response, body))
@@ -50,7 +52,7 @@ class TestCheckProxyRequest(unittest.TestCase):
 
     def test_denyIP(self):
         return self.check_proxy_request(
-            ["127.0.0.1"], '127.0.0.1', 400, "<html>Denied</html>")
+            ['69.16.230.117'], 'zombo.com', 400, "<html>Denied</html>")
 
     def test_allowIP(self):
         return self.check_proxy_request(
