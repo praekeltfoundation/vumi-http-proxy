@@ -3,21 +3,21 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 from twisted.internet.endpoints import clientFromString, serverFromString
 from twisted.web.client import ProxyAgent, readBody
 from twisted.trial import unittest
-from vumi_http_proxy.http_proxy import ProxyFactory, CheckProxyRequest
-from .helpers import DEFAULT_TIMEOUT, TestResolver, TestAgent, HttpTestServer
+from vumi_http_proxy.http_proxy import ProxyFactory
+from vumi_http_proxy.test import helpers
 
 
 class TestCheckProxyRequest(unittest.TestCase):
-    timeout = DEFAULT_TIMEOUT
+    timeout = helpers.DEFAULT_TIMEOUT
 
     def setUp(self):
-        self.server = HttpTestServer(self)
+        self.server = helpers.HttpTestServer(self)
 
     @inlineCallbacks
     def setup_proxy(self, blacklist):
         # self.patch(http_proxy.Initialize, 'main', TestInitialize)
-        resolver = TestResolver()
-        http_client = TestAgent()
+        resolver = helpers.TestResolver()
+        http_client = helpers.TestAgent()
         proxy = ProxyFactory(blacklist, resolver, http_client)
         server_endpoint = serverFromString(
             reactor, "tcp:8080:interface=127.0.0.1")
@@ -30,8 +30,9 @@ class TestCheckProxyRequest(unittest.TestCase):
         client_endpoint = clientFromString(
             reactor, "tcp:host=localhost:port=%s" % (proxy_port,))
         agent = ProxyAgent(client_endpoint)
-        # self.patch(CheckProxyRequest(), 'sendResponseBack',
-        #  TestSendResponseBack())
+        """self.patch(
+            CheckProxyRequest, 'sendResponseBack',
+            TestSendResponseBack)"""
         response = yield agent.request("GET", url)
         body = yield readBody(response)
         returnValue((response, body))

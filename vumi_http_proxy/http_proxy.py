@@ -73,6 +73,8 @@ class CheckProxyRequest(proxy.ProxyRequest):
         for key, value in r.headers.getAllRawHeaders():
             self.responseHeaders.addRawHeader(key, value)
         body = yield readBody(r)
+        print "HERE"
+        print body
         self.write(body)
         self.finish()
 
