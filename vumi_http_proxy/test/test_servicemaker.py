@@ -1,6 +1,8 @@
-from vumi_http_proxy.servicemaker import Options, ProxyWorkerServiceMaker
+from vumi_http_proxy.servicemaker import (
+    Options, ProxyWorkerServiceMaker, client)
 from vumi_http_proxy import http_proxy
 from twisted.trial import unittest
+from vumi_http_proxy.test import helpers
 
 
 class TestOptions(unittest.TestCase):
@@ -22,6 +24,7 @@ class TestProxyWorkerServiceMaker(unittest.TestCase):
     def test_makeService(self):
         options = Options()
         options.parseOptions([])
+        self.patch(client, 'createResolver', lambda: helpers.TestResolver())
         servicemaker = ProxyWorkerServiceMaker()
         service = servicemaker.makeService(options)
         self.assertTrue(isinstance(service.factory, http_proxy.ProxyFactory))
