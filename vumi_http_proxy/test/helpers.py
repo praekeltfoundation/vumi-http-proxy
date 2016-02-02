@@ -1,12 +1,11 @@
 from twisted.web import server, resource
-from twisted.web.client import Response
+from twisted.web.client import Response, ResponseDone
 from twisted.web.http_headers import Headers
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol
 from twisted.internet.defer import inlineCallbacks, returnValue, succeed
 from twisted.internet.defer import Deferred
 from twisted.internet.endpoints import serverFromString
-from twisted.internet.error import ConnectionDone
 from twisted.python.failure import Failure
 from twisted.test import proto_helpers
 from vumi_http_proxy.http_proxy import ProxyFactory, StringProducer
@@ -64,7 +63,7 @@ class MockResponse(object):
     def deliverBody(self, protocol):
         protocol.dataReceived(self.response_string)
         protocol.connectionLost(
-            Failure(ConnectionDone(u"All Happy")))
+            Failure(ResponseDone(u"All Happy")))
 
 
 class TestAgent(object):
