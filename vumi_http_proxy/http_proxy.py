@@ -59,7 +59,6 @@ class CheckProxyRequest(proxy.ProxyRequest):
             headers = self.requestHeaders
             d = self.channel.http_client.request(
                 self.method, uri, headers, StringProducer(self.content.read()))
-            print 'HERE'
             d.addCallback(self.sendResponseBack)
 
     def replaceHostWithIP(self, uri, ip_addr):
@@ -74,9 +73,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
         self.setResponseCode(r.code)
         for key, value in r.headers.getAllRawHeaders():
             self.responseHeaders.addRawHeader(key, value)
-        print "ASDf"
         body = yield readBody(r)
-        print "Last"
         self.write(body)
         self.finish()
 
