@@ -1,23 +1,18 @@
 from twisted.web import server, resource
-from twisted.web.client import Response, ResponseDone
+from twisted.web.client import ResponseDone
 from twisted.web.http_headers import Headers
 from twisted.internet import reactor
-from twisted.internet.protocol import Protocol
 from twisted.internet.defer import inlineCallbacks, returnValue, succeed
-from twisted.internet.defer import Deferred
 from twisted.internet.endpoints import serverFromString
 from twisted.python.failure import Failure
-from twisted.test import proto_helpers
-from vumi_http_proxy.http_proxy import ProxyFactory, StringProducer
-
 
 DEFAULT_TIMEOUT = 2
+
 hostnames = {'zombo.com': '69.16.230.117',
              'zombie.com': '66.96.162.142'}
 
 
 class HttpTestResource(resource.Resource):
-
     isLeaf = True
 
     def render_GET(self, request):
@@ -25,7 +20,6 @@ class HttpTestResource(resource.Resource):
 
 
 class HttpTestServer(object):
-
     def __init__(self, testcase):
         self.site = server.Site(HttpTestResource())
         self.server = None
@@ -70,19 +64,3 @@ class TestAgent(object):
     def request(self, method, uri, headers, bodyProducer):
         response = MockResponse(200, "<html>Allowed</html>")
         return succeed(response)
-
-
-class TestInitialize(object):
-    @inlineCallbacks
-    def main(self):
-        resolver = TestResolver
-        http_client = TestAgent
-        proxy = ProxyFactory(['69.16.230.117'], resolver, http_client)
-        server_endpoint = serverFromString(
-            reactor, "tcp:%d:interface=%s" % (self.port, self.ip))
-        server = yield server_endpoint.listen(proxy)
-        self.addCleanup(server.stopListening)
-        returnValue(server.getHost().port)
-
-    def getServer(self):
-        return server

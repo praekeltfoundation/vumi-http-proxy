@@ -15,7 +15,6 @@ class TestCheckProxyRequest(unittest.TestCase):
 
     @inlineCallbacks
     def setup_proxy(self, blacklist):
-        # self.patch(http_proxy.Initialize, 'main', TestInitialize)
         resolver = helpers.TestResolver()
         http_client = helpers.TestAgent()
         proxy = ProxyFactory(blacklist, resolver, http_client)

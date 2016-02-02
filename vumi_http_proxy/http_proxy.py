@@ -1,18 +1,15 @@
 from twisted.python import log
 from twisted.web import http, proxy
 from twisted.internet import reactor
-from twisted.internet.protocol import Protocol
 from twisted.internet.endpoints import serverFromString
 from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
-from twisted.internet.defer import inlineCallbacks, succeed, Deferred
+from twisted.internet.defer import inlineCallbacks, succeed
 
-# blacklist of disallowed domains (change this to ips later, and move)
+# blacklist of disallowed domains (move to proxy_blacklist.py)
 
 DEFAULT_BLACKLIST = ["69.16.230.117"]
-
-#  Set up proxy
 
 
 class ProxyFactory(http.HTTPFactory):
