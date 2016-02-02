@@ -3,6 +3,7 @@ from twisted.web.client import Response
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol
 from twisted.internet.defer import inlineCallbacks, returnValue, succeed
+from twisted.internet.defer import Deferred
 from twisted.internet.endpoints import serverFromString
 from twisted.test import proto_helpers
 from vumi_http_proxy.http_proxy import ProxyFactory, StringProducer
@@ -52,19 +53,12 @@ class TestResolver(object):
 
 class TestAgent(object):
     def request(self, method, uri, headers, bodyProducer):
-        self.tr = proto_helpers.StringTransport()
-        self.tr.write("<html>Allowed</html>")
-        r = Response(
-            ('HTTP', 1, 1), 200, "<html>Allowed</html>",
-            headers, self.tr)
-        # Correct body is contained in self.tr.value()
-        self.body = self.makeBody()
+        tr = proto_helpers.StringTransport()
+        body = "<html>Allowed</html>"
+        tr.io.write(body)
+        # import pdb; pdb.set_trace()
+        r = Response((b'HTTP', 1, 1), 200, "OK", headers, tr)
         return succeed(r)
-
-    @inlineCallbacks
-    def makeBody(self):
-        yield StringProducer(self.tr.value())
-        return
 
 
 class TestInitialize(object):
@@ -81,20 +75,3 @@ class TestInitialize(object):
 
     def getServer(self):
         return server
-
-
-class BeginningPrinter(Protocol):
-    def __init__(self, finished):
-        self.finished = finished
-        self.remaining = 1024 * 10
-
-    def dataReceived(self, bytes):
-        if self.remaining:
-            display = bytes[:self.remaining]
-            print 'Some data received:'
-            print display
-            self.remaining -= len(display)
-
-    def connectionLost(self, reason):
-        print 'Finished receiving body:', reason.getErrorMessage()
-        self.finished.callback(None)

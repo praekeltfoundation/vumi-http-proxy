@@ -1,11 +1,12 @@
 from twisted.python import log
 from twisted.web import http, proxy
 from twisted.internet import reactor
+from twisted.internet.protocol import Protocol
 from twisted.internet.endpoints import serverFromString
 from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
-from twisted.internet.defer import inlineCallbacks, succeed
+from twisted.internet.defer import inlineCallbacks, succeed, Deferred
 
 # blacklist of disallowed domains (change this to ips later, and move)
 
@@ -58,6 +59,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
             headers = self.requestHeaders
             d = self.channel.http_client.request(
                 self.method, uri, headers, StringProducer(self.content.read()))
+            print 'HERE'
             d.addCallback(self.sendResponseBack)
 
     def replaceHostWithIP(self, uri, ip_addr):
@@ -72,9 +74,9 @@ class CheckProxyRequest(proxy.ProxyRequest):
         self.setResponseCode(r.code)
         for key, value in r.headers.getAllRawHeaders():
             self.responseHeaders.addRawHeader(key, value)
-        # gets this far
+        print "ASDf"
         body = yield readBody(r)
-        print body
+        print "Last"
         self.write(body)
         self.finish()
 
