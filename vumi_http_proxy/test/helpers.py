@@ -8,8 +8,10 @@ from twisted.python.failure import Failure
 
 DEFAULT_TIMEOUT = 2
 
-hostnames = {'zombo.com': '69.16.230.117',
-             'zombie.com': '66.96.162.142'}
+hostnames = {
+    'zombo.com': '69.16.230.117',
+    'zombie.com': '66.96.162.142'
+}
 
 
 class HttpTestResource(resource.Resource):
