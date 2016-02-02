@@ -51,12 +51,12 @@ class CheckProxyRequest(proxy.ProxyRequest):
             self.write("<html>Denied</html>")
             self.finish()
             return
-        else:
-            uri = self.replaceHostWithIP(self.uri, ip_addr)
-            headers = self.requestHeaders
-            d = self.channel.http_client.request(
-                self.method, uri, headers, StringProducer(self.content.read()))
-            d.addCallback(self.sendResponseBack)
+        uri = self.replaceHostWithIP(self.uri, ip_addr)
+        headers = self.requestHeaders
+        d = self.channel.http_client.request(
+            self.method, uri, headers, StringProducer(self.content.read()))
+        d.addCallback(self.sendResponseBack)
+        return d
 
     def replaceHostWithIP(self, uri, ip_addr):
         scheme, netloc, path, params, query, fragment = urlparse(uri)

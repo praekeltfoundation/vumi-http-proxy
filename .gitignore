@@ -17,8 +17,6 @@ _trial_temp*/
 docs/notes.txt
 twisted/plugins/dropin.cache
 twistd.log
-vumi_http_proxy/twistd.pid
-vumi_http_proxy/twistd.log
 eggs/
 .eggs/
 lib/
