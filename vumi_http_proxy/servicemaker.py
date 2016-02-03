@@ -16,8 +16,6 @@ class Options(usage.Options):
     optParameters = [["port", None, 8080,
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"]]
-    optFlags = [["--port", "-p", "The port number to start the proxy"],
-                ["--interface", "-i", "IP to start proxy on"]]
 
 
 class ProxyWorkerServiceMaker(object):
