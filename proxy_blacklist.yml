@@ -2,8 +2,7 @@
 #   Config file for vumi_http_proxy.
 #   Add all ip addresses to blacklist here
 #----------------------------------------------
-
-PROXY_BLACKLIST:
+proxy-blacklist:
     # IPv4 ADDRESSES
     - '69.16.230.117'
     - '93.184.216.34'

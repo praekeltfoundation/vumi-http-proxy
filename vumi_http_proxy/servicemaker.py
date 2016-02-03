@@ -15,7 +15,9 @@ from twisted.internet import reactor
 class Options(usage.Options):
     optParameters = [["port", None, 8080,
                      "The port number to start the proxy"],
-                     ["interface", None, "0.0.0.0", "IP to start proxy on"]]
+                     ["interface", None, "0.0.0.0", "IP to start proxy on"],
+                     ["blacklist", None, "proxy_blacklist.yml",
+                     "Name of the YAML config file for blacklist"]]
 
 
 class ProxyWorkerServiceMaker(object):
@@ -26,6 +28,6 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         factory = ProxyFactory(
-            ["zombo.com"], client.createResolver(), Agent(reactor))
+            options["blacklist"], client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
                 options["port"], str(options["interface"])), factory)

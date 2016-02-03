@@ -11,13 +11,16 @@ class TestOptions(unittest.TestCase):
         options.parseOptions([])
         self.assertEqual(options["port"], 8080)
         self.assertEqual(str(options["interface"]), "0.0.0.0")
+        self.assertEqual(str(options["blacklist"]), "proxy_blacklist.yml")
 
     def test_override(self):
         options = Options()
         options.parseOptions(["--port", 8000])
         options.parseOptions(["--interface", '127.0.0.1'])
+        options.parseOptions(["--blacklist", "fake_blacklist.yml"])
         self.assertEqual(options["port"], "8000")
         self.assertEqual(str(options["interface"]), "127.0.0.1")
+        self.assertEqual(str(options["blacklist"]), "fake_blacklist.yml")
 
 
 class TestProxyWorkerServiceMaker(unittest.TestCase):
