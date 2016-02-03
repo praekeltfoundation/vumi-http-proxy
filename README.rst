@@ -1,5 +1,7 @@
-# vumi-http-proxy
-Black &amp; White listing HTTP Proxy for Vumi Sandbox HTTP requests
+vumi-http-proxy
+====
+
+Black & White listing HTTP Proxy for Vumi Sandbox HTTP requests
 
 |vumi-proxy-ci| |vumi-proxy-cover|
 
@@ -15,14 +17,14 @@ Black &amp; White listing HTTP Proxy for Vumi Sandbox HTTP requests
 
 To build this locally:
 
-$ virtualenv ve
-$ source ve/bin/activate
-(ve)$ pip install -e .
-(ve)$ clickme
+	$ virtualenv ve
+	$ source ve/bin/activate
+	(ve)$ pip install -e .
+	(ve)$ clickme
 
 To run default port and ip config. Alternatively:
 
-$ virtualenv ve
-$ source ve/bin/activate
-(ve)$ pip install -e .
-(ve)$ python vumi_http_proxy
+	$ virtualenv ve
+	$ source ve/bin/activate
+	(ve)$ pip install -e .
+	(ve)$ python vumi_http_proxy
