@@ -6,10 +6,8 @@ from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
-
+import yaml
 # blacklist of disallowed domains (move to proxy_blacklist.py)
-
-DEFAULT_BLACKLIST = ["69.16.230.117"]
 
 
 class ProxyFactory(http.HTTPFactory):
@@ -46,7 +44,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
                        host + " </html>")
             self.finish()
             return
-        if ip_addr in DEFAULT_BLACKLIST:
+        if ip_addr in self.channel.blacklist:
             self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()
@@ -103,10 +101,8 @@ class Proxy(proxy.Proxy):
 
 
 class Initialize(object):
-
-    def __init__(self, blacklist, ip, port):
-        if not blacklist:
-            blacklist = DEFAULT_BLACKLIST
+    def __init__(self, blacklistfile, ip, port):
+        blacklist = self.read_file(blacklistfile)
         self.blacklist = blacklist
         self.ip = ip
         self.port = port
@@ -119,3 +115,13 @@ class Initialize(object):
             reactor, "tcp:%d:interface=%s" % (self.port, self.ip))
         endpoint.listen(factory)
         reactor.run()
+
+    def read_file(self, blacklistfile):
+        blacklist = []
+        if not blacklistfile:
+            log.err("No blacklist config file provided.")
+        else:
+            with open(str(blacklistfile), 'r') as blstream:
+                bufferlist = yaml.load(blstream)
+                blacklist = bufferlist.get('proxy-blacklist')
+        return blacklist
