@@ -1,30 +1,28 @@
 from twisted.internet import reactor
-from twisted.internet.defer import inlineCallbacks, Deferred, returnValue
-from twisted.internet.endpoints import serverFromString, clientFromString
-from twisted.trial import unittest
-from twisted.test import proto_helpers
+from twisted.internet.defer import inlineCallbacks, returnValue
+from twisted.internet.endpoints import clientFromString, serverFromString
 from twisted.web.client import ProxyAgent, readBody
-
+from twisted.trial import unittest
 from vumi_http_proxy.http_proxy import ProxyFactory
+from vumi_http_proxy.test import helpers
 
-from .helpers import HttpTestServer, DEFAULT_TIMEOUT
 
-
-class TestProxyToLocalServer(unittest.TestCase):
-
-    timeout = DEFAULT_TIMEOUT
+class TestCheckProxyRequest(unittest.TestCase):
+    timeout = helpers.DEFAULT_TIMEOUT
 
     def setUp(self):
-        self.server = HttpTestServer(self)
+        self.server = helpers.HttpTestServer(self)
 
     @inlineCallbacks
     def setup_proxy(self, blacklist):
-        proxy = ProxyFactory(blacklist)
+        resolver = helpers.TestResolver()
+        http_client = helpers.TestAgent()
+        proxy = ProxyFactory(blacklist, resolver, http_client)
         server_endpoint = serverFromString(
             reactor, "tcp:0:interface=127.0.0.1")
-        server = yield server_endpoint.listen(proxy)
-        self.addCleanup(server.stopListening)
-        returnValue(server.getHost().port)
+        self.server = yield server_endpoint.listen(proxy)
+        self.addCleanup(self.server.stopListening)
+        returnValue(self.server.getHost().port)
 
     @inlineCallbacks
     def make_request(self, proxy_port, url):
@@ -36,59 +34,23 @@ class TestProxyToLocalServer(unittest.TestCase):
         returnValue((response, body))
 
     @inlineCallbacks
-    def check_proxy_request(self, blacklist, expected_code, expected_body):
+    def check_proxy_request(self, blacklist, ip, expected_code, expected_body):
         http_port = yield self.server.start()
         proxy_port = yield self.setup_proxy(blacklist)
-        url = 'http://127.0.0.1:%s/' % (http_port,)
+        url = 'http://%s:%s/' % (ip, http_port,)
         response, body = yield self.make_request(proxy_port, url)
         self.assertEqual(response.code, expected_code)
         self.assertEqual(body, expected_body)
 
-    def test_allow(self):
-        return self.check_proxy_request([], 200, '<html>Allowed</html>')
-
-    def test_deny(self):
+    def test_bad_ip(self):
         return self.check_proxy_request(
-            ['127.0.0.1'], 400, "<html>Denied</html>")
+            [], '', 400,
+            "<html>ERROR: No IP adresses found for name '' </html>")
 
+    def test_deny_ip(self):
+        return self.check_proxy_request(
+            ['69.16.230.117'], 'zombo.com', 400, "<html>Denied</html>")
 
-class TestCheckProxyRequest(unittest.TestCase):
-
-    timeout = DEFAULT_TIMEOUT
-
-    def setUp(self):
-        factory = ProxyFactory(['zombo.com'])
-        self.proto = factory.buildProtocol(('0.0.0.0', 0))
-        self.tr = proto_helpers.StringTransport()
-        self.proto.makeConnection(self.tr)
-
-    @inlineCallbacks
-    def test_artisanal_allow(self):
-        self.proto.dataReceived("\r\n".join([
-            "GET http://zombie.com/ HTTP/1.1",
-            "Host: zombie.com",
-            "",
-            "",
-        ]))
-        d = Deferred()
-        reactor.callLater(1, d.callback, None)
-        yield d
-        self.assertTrue(self.tr.value().startswith("HTTP/1.1 200 OK"))
-
-    def test_artisanal_deny(self):
-        self.proto.dataReceived("\r\n".join([
-            "GET http://zombo.com/ HTTP/1.1",
-            "Host: zombo.com",
-            "",
-            "",
-        ]))
-        self.assertEqual(self.tr.value(), "\r\n".join([
-            "HTTP/1.1 400 Bad Request",
-            "Transfer-Encoding: chunked",
-            "",
-            "13",
-            "<html>Denied</html>",
-            "0",
-            "",
-            "",
-        ]))
+    def test_allow_ip(self):
+        return self.check_proxy_request(
+            ['69.16.230.117'], 'zombie.com', 200, '<html>Allowed</html>')
