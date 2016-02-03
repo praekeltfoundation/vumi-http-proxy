@@ -15,14 +15,14 @@ Black & White listing HTTP Proxy for Vumi Sandbox HTTP requests
     :scale: 100%
     :target: https://coveralls.io/r/praekelt/vumi-http-proxy?branch=develop
 
-To build this locally:
+To build this locally::
 
 	$ virtualenv ve
 	$ source ve/bin/activate
 	(ve)$ pip install -e .
 	(ve)$ clickme
 
-To run default port and ip config. Alternatively:
+To run default port and ip config. Alternatively::
 
 	$ virtualenv ve
 	$ source ve/bin/activate
