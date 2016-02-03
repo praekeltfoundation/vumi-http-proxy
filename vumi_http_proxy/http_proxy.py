@@ -9,8 +9,6 @@ from twisted.internet.defer import inlineCallbacks, succeed
 import yaml
 # blacklist of disallowed domains (move to proxy_blacklist.py)
 
-DEFAULT_BLACKLIST = ["69.16.230.117"]
-
 
 class ProxyFactory(http.HTTPFactory):
 
@@ -46,7 +44,7 @@ class CheckProxyRequest(proxy.ProxyRequest):
                        host + " </html>")
             self.finish()
             return
-        if ip_addr in DEFAULT_BLACKLIST:
+        if ip_addr in self.channel.blacklist:
             self.setResponseCode(400)
             self.write("<html>Denied</html>")
             self.finish()

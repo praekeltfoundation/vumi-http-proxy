@@ -11,7 +11,7 @@ class TestOptions(unittest.TestCase):
         options.parseOptions([])
         self.assertEqual(options["port"], 8080)
         self.assertEqual(str(options["interface"]), "0.0.0.0")
-        self.assertEqual(str(options["blacklist"]), "proxy_blacklist.yml")
+        self.assertEqual(str(options["blacklist"]), "./docs/proxy_blacklist.yml")
 
     def test_override(self):
         options = Options()

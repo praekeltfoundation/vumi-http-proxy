@@ -44,7 +44,7 @@ class TestCheckProxyRequest(unittest.TestCase):
 
     def test_bad_ip(self):
         return self.check_proxy_request(
-            [], '', 400,
+            ['69.16.230.117'], '', 400,
             "<html>ERROR: No IP adresses found for name '' </html>")
 
     def test_deny_ip(self):

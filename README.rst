@@ -20,15 +20,23 @@ To build this locally::
 	$ virtualenv ve
 	$ source ve/bin/activate
 	(ve)$ pip install -e .
-	(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO
+
+To run using default configuration::
+
+	(ve)$ twistd -n vumi_http_proxy
 
 Alternatively::
 
-	$ virtualenv ve
-	$ source ve/bin/activate
-	(ve)$ pip install -e .
-	(ve)$ clickme --interface IPADDRESS --port PORTNO
+	(ve)$ clickme
 
+To run using manual configuration::
 
+	(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO --blacklist=BLACKLISTFILENAME
 
-	
+Alternatively::
+
+	(ve)$ clickme --interface IPADDRESS --port PORTNO --blacklist BLACKLISTFILENAME
+
+For help::
+
+	(ve)$ clickme --help

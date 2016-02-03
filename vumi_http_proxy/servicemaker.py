@@ -16,7 +16,7 @@ class Options(usage.Options):
     optParameters = [["port", None, 8080,
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"],
-                     ["blacklist", None, "proxy_blacklist.yml",
+                     ["blacklist", None, "./docs/proxy_blacklist.yml",
                      "Name of the YAML config file for blacklist"]]
 
 

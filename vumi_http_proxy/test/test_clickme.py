@@ -31,6 +31,6 @@ class TestClickMe(unittest.TestCase):
         filename = self.mktemp()
         with open(filename, 'w') as stream:
             stream.write("proxy-blacklist:\n")
-            for i in blacklist:
-                stream.write(" - "+i+"\n")
+            for ip_addr in blacklist:
+                stream.write(" - " + ip_addr + "\n")
         return filename
