@@ -15,7 +15,7 @@ class TestOptions(unittest.TestCase):
     def test_override(self):
         options = Options()
         options.parseOptions(["--port", 8000])
-        options.parseOptions(["--interface", "127.0.0.1"])
+        options.parseOptions(["--interface", '127.0.0.1'])
         self.assertEqual(options["port"], "8000")
         self.assertEqual(str(options["interface"]), "127.0.0.1")
 
