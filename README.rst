@@ -20,11 +20,15 @@ To build this locally::
 	$ virtualenv ve
 	$ source ve/bin/activate
 	(ve)$ pip install -e .
-	(ve)$ clickme
+	(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO
 
-To run default port and ip config. Alternatively::
+Alternatively::
 
 	$ virtualenv ve
 	$ source ve/bin/activate
 	(ve)$ pip install -e .
-	(ve)$ python vumi_http_proxy
+	(ve)$ clickme --interface IPADDRESS --port PORTNO
+
+
+
+	

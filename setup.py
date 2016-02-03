@@ -26,6 +26,7 @@ setup(
         'zope.interface',
         'Click',
         'Twisted',
+        'PyYAML',
     ],
     entry_points='''
         [console_scripts]

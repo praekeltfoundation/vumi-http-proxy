@@ -1,3 +1,5 @@
+#!usr/bin/env python
+
 from twisted.python import log
 from twisted.web import http, proxy
 from twisted.internet import reactor
@@ -7,6 +9,7 @@ from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
 
+import yaml
 # blacklist of disallowed domains (move to proxy_blacklist.py)
 
 DEFAULT_BLACKLIST = ["69.16.230.117"]
@@ -107,6 +110,9 @@ class Initialize(object):
     def __init__(self, blacklist, ip, port):
         if not blacklist:
             blacklist = DEFAULT_BLACKLIST
+        else:
+            with open("proxy_blacklist.yml", 'r') as blstream:
+                print yaml.load(blstream)
         self.blacklist = blacklist
         self.ip = ip
         self.port = port
