@@ -7,6 +7,7 @@ from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
 import yaml
+import sys
 # blacklist of disallowed domains (move to proxy_blacklist.py)
 
 
@@ -120,6 +121,8 @@ class Initialize(object):
         blacklist = []
         if not blacklistfile:
             log.err("No blacklist config file provided.")
+            log.err('Ending process.')
+            sys.exit()
         else:
             with open(str(blacklistfile), 'r') as blstream:
                 bufferlist = yaml.load(blstream)
