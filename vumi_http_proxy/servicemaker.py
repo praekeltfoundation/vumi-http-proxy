@@ -20,7 +20,9 @@ class Options(usage.Options):
                      "Name of the YAML config file for blacklist"]]
 
     def postOptions(self):
-        if not int(self["port"]):
+        try:
+            self["port"] = int(self["port"])
+        except (ValueError, TypeError):
             raise usage.UsageError('Port must be an integer. Please try again')
 
 
@@ -34,4 +36,4 @@ class ProxyWorkerServiceMaker(object):
         factory = ProxyFactory(
                 options["blacklist"], client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
-                int(options["port"]), options["interface"]), factory)
+                options["port"], options["interface"]), factory)
