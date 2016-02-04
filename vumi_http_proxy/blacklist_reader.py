@@ -1,5 +1,4 @@
 import yaml
-import sys
 from twisted.python import log
 
 
@@ -12,8 +11,3 @@ def read_blacklist(blacklistfile):
             bufferlist = yaml.load(blstream)
             blacklist = bufferlist.get('proxy-blacklist')
     return blacklist
-
-
-def safely_exit(self):
-    log.err("Ending process..")
-    sys.exit()
