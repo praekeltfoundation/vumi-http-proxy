@@ -3,8 +3,6 @@ from click.testing import CliRunner
 from vumi_http_proxy import queen_of_ni, http_proxy
 from twisted.trial import unittest
 
-# Testing segment
-
 
 class TestQueenOfNi(unittest.TestCase):
     def test_queen_of_ni(self):
