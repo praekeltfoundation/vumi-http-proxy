@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 from click.testing import CliRunner
-from vumi_http_proxy import clickme, http_proxy
+from vumi_http_proxy import queen_of_ni, http_proxy
 from twisted.trial import unittest
 
 # Testing segment
 
 
-class TestClickMe(unittest.TestCase):
-    def test_click(self):
+class TestQueenOfNi(unittest.TestCase):
+    def test_queen_of_ni(self):
         runner = CliRunner()
         self.initializers = []
         self.patch(http_proxy.Initialize, 'main',
                    lambda x: self.initializers.append(x))
         fake_blacklist = ["foo", "bar"]
         filename = self.make_blacklist(fake_blacklist)
-        result = runner.invoke(clickme.cli, ['--blacklist', filename])
+        result = runner.invoke(queen_of_ni.cli, ['--blacklist', filename])
         self.assertEqual(result.exception, None)
         self.assertEqual(result.output.splitlines(), [
            'Starting connection to 0.0.0.0:8080',
