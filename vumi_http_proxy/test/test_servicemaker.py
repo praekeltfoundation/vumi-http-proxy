@@ -10,8 +10,8 @@ class TestOptions(unittest.TestCase):
         options = Options()
         options.parseOptions([])
         self.assertEqual(options["port"], 8080)
-        self.assertEqual(str(options["interface"]), "0.0.0.0")
-        self.assertEqual(str(options["blacklist"]), 'None')
+        self.assertEqual(options["interface"], "0.0.0.0")
+        self.assertEqual(options["blacklist"], None)
 
     def test_override(self):
         options = Options()
