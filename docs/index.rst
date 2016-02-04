@@ -12,10 +12,11 @@ Contents:
 =================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    project-outline.rst
    usage.rst
+   queen-of-ni.rst
 
 
 
