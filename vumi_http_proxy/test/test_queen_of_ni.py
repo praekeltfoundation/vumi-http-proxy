@@ -25,7 +25,7 @@ class TestQueenOfNi(unittest.TestCase):
         self.assertEquals(type(initializer), http_proxy.Initialize)
         self.assertEquals(initializer.port, 8080)
         self.assertEquals(initializer.ip, "0.0.0.0")
-        self.assertEquals(initializer.blacklist, ["foo", "bar"])
+        self.assertEquals(initializer.blacklist.blacklist, ["foo", "bar"])
 
     def make_blacklist(self, blacklist):
         filename = self.mktemp()
