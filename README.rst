@@ -3,7 +3,7 @@ vumi-http-proxy
 
 Black & White listing HTTP Proxy for Vumi Sandbox HTTP requests
 
-|vumi-proxy-ci| |vumi-proxy-cover|
+|vumi-proxy-ci| |vumi-proxy-cover| |vumi-proxy-docs|
 
 .. |vumi-proxy-ci| image:: https://travis-ci.org/praekelt/vumi-http-proxy.svg?branch=develop
     :alt: Vumi-http-proxy Travis CI build status
@@ -14,6 +14,11 @@ Black & White listing HTTP Proxy for Vumi Sandbox HTTP requests
     :alt: Vumi-http-proxy coverage on Coveralls
     :scale: 100%
     :target: https://coveralls.io/r/praekelt/vumi-http-proxy?branch=develop
+
+.. |vumi-proxy-docs| image:: https://readthedocs.org/projects/queen-of-ni/badge/?version=latest
+	:target: http://queen-of-ni.readthedocs.org/en/latest/?badge=latest
+	:alt: Documentation Status
+	:scale: 100%
 
 To build this locally::
 
