@@ -3,8 +3,6 @@ from click.testing import CliRunner
 from vumi_http_proxy import queen_of_ni, http_proxy
 from twisted.trial import unittest
 
-# Testing segment
-
 
 class TestQueenOfNi(unittest.TestCase):
     def test_queen_of_ni(self):
@@ -25,7 +23,7 @@ class TestQueenOfNi(unittest.TestCase):
         self.assertEquals(type(initializer), http_proxy.Initialize)
         self.assertEquals(initializer.port, 8080)
         self.assertEquals(initializer.ip, "0.0.0.0")
-        self.assertEquals(initializer.blacklist.blacklist, ["foo", "bar"])
+        self.assertEquals(initializer.blacklist, ["foo", "bar"])
 
     def make_blacklist(self, blacklist):
         filename = self.mktemp()
