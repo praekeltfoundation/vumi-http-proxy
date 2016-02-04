@@ -10,10 +10,12 @@ from vumi_http_proxy.http_proxy import ProxyFactory
 from twisted.names import client
 from twisted.web.client import Agent
 from twisted.internet import reactor
+from twisted.python import log
+import sys
 
 
 class Options(usage.Options):
-    optParameters = [["port", None, 8080,
+    optParameters = [["port", None, "8080",
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"],
                      ["blacklist", None, "./docs/proxy_blacklist.yml",
@@ -27,7 +29,12 @@ class ProxyWorkerServiceMaker(object):
     options = Options
 
     def makeService(self, options):
+        try:
+            port = int(options["port"])
+        except ValueError:
+            log.err('Port must be an integer. Please try again')
+            sys.exit()
         factory = ProxyFactory(
-            options["blacklist"], client.createResolver(), Agent(reactor))
+                options["blacklist"], client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
-                options["port"], str(options["interface"])), factory)
+                port, options["interface"]), factory)
