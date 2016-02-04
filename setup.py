@@ -30,7 +30,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        queen_of_ni=vumi_http_proxy.queen_of_ni:cli
+        queen-of-ni=vumi_http_proxy.queen_of_ni:cli
     ''',
     license="BSD",
     classifiers=[
