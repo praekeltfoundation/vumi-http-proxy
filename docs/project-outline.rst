@@ -24,9 +24,6 @@ whether the calls to the specified resources are allowed or not. This boils down
 to maintaining a blacklist of disallowed HTTP resources and per request checking
 against the blacklist.
 
-People to poke: Simon de Haan (smn), Simon Cross (hodgestar), Justin van der
-Merwe (justinvdm), Jeremy Thurgood (jerith)
-
 
 Useful links
 ------------

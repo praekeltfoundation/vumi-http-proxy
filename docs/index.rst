@@ -7,6 +7,9 @@ Welcome to Vumi HTTP Proxy's documentation!
 ===========================================
 
 Contents:
+=================
+
+* :ref:`project-outline`
 
 .. toctree::
    :maxdepth: 2
