@@ -9,7 +9,7 @@ class TestOptions(unittest.TestCase):
     def test_defaults(self):
         options = Options()
         options.parseOptions([])
-        self.assertEqual(options["port"], 8080)
+        self.assertEqual(options["port"], '8080')
         self.assertEqual(str(options["interface"]), "0.0.0.0")
         self.assertEqual(str(options["blacklist"]), "./docs/proxy_blacklist.yml")
 
