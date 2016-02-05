@@ -14,10 +14,10 @@ from vumi_http_proxy import blacklist_reader
 def cli(interface, port, blacklist):
     """This script runs vumi-http-proxy on <interface>:<port>
     with the specified blacklist"""
-    blacklist = blacklist_reader.read_blacklist(blacklist)
+    blacklist, dns_servers = blacklist_reader.read_blacklist(blacklist)
     interface = str(interface)
     click.echo("Starting connection to %s:%d" % (interface, port))
-    i = http_proxy.Initialize(blacklist, interface, port)
+    i = http_proxy.Initialize(blacklist, dns_servers, interface, port)
     i.main()
 
 

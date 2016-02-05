@@ -100,12 +100,14 @@ class Proxy(proxy.Proxy):
 
 
 class Initialize(object):
-    def __init__(self, blacklist, ip, port):
+    def __init__(self, blacklist, dnsservers, ip, port):
         self.blacklist = blacklist
+        self.dnsservers = dnsservers
         self.ip = ip
         self.port = port
 
     def main(self):
+        print self.dnsservers
         resolver = client.createResolver()
         http_client = Agent(reactor)
         factory = ProxyFactory(self.blacklist, resolver, http_client)
