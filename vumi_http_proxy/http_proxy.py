@@ -107,8 +107,7 @@ class Initialize(object):
         self.port = port
 
     def main(self):
-        print self.dnsservers
-        resolver = client.createResolver()
+        resolver = client.createResolver(self.dnsservers)
         http_client = Agent(reactor)
         factory = ProxyFactory(self.blacklist, resolver, http_client)
         endpoint = serverFromString(

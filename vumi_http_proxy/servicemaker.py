@@ -10,15 +10,15 @@ from twisted.names import client
 from twisted.web.client import Agent
 from twisted.internet import reactor
 from vumi_http_proxy.http_proxy import ProxyFactory
-from vumi_http_proxy import blacklist_reader
+from vumi_http_proxy import config_reader
 
 
 class Options(usage.Options):
     optParameters = [["port", None, "8080",
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"],
-                     ["blacklist", None, None,
-                     "Name of the YAML config file for blacklist"]]
+                     ["configfile", None, None,
+                     "Name of the YAML config file for blacklist and servers"]]
 
     def postOptions(self):
         try:
@@ -34,7 +34,7 @@ class ProxyWorkerServiceMaker(object):
     options = Options
 
     def makeService(self, options):
-        blacklist = blacklist_reader.read_blacklist(options["blacklist"])
+        blacklist = config_reader.read_config(options["configfile"])
         factory = ProxyFactory(
             blacklist, client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
