@@ -3,6 +3,7 @@ from vumi_http_proxy.servicemaker import (
 from vumi_http_proxy import http_proxy
 from twisted.trial import unittest
 from vumi_http_proxy.test import helpers
+import yaml
 
 
 class TestOptions(unittest.TestCase):
@@ -11,25 +12,26 @@ class TestOptions(unittest.TestCase):
         options.parseOptions([])
         self.assertEqual(options["port"], 8080)
         self.assertEqual(options["interface"], "0.0.0.0")
-        self.assertEqual(options["blacklist"], None)
+        self.assertEqual(options["configfile"], None)
 
     def test_override(self):
         options = Options()
         fake_blacklist = ["foo", "bar"]
-        filename = self.make_blacklist(fake_blacklist)
+        fake_dnsservers = [['8.8.8.8', 53], ['8.8.4.4', 53]]
+        filename = self.make_config(fake_blacklist, fake_dnsservers)
         options.parseOptions(["--port", 8000])
         options.parseOptions(["--interface", '127.0.0.1'])
-        options.parseOptions(["--blacklist", filename])
+        options.parseOptions(["--configfile", filename])
         self.assertEqual(options["port"], 8000)
         self.assertEqual(str(options["interface"]), "127.0.0.1")
-        self.assertEqual(str(options["blacklist"]), filename)
+        self.assertEqual(str(options["configfile"]), filename)
 
-    def make_blacklist(self, blacklist):
+    def make_config(self, blacklist, dnsservers):
         filename = self.mktemp()
+        filecont = yaml.safe_dump(
+            {"proxy-blacklist": blacklist, "dns-servers": dnsservers})
         with open(filename, 'w') as stream:
-            stream.write("proxy-blacklist:\n")
-            for ip_addr in blacklist:
-                stream.write(" - " + ip_addr + "\n")
+            stream.write(filecont)
         return filename
 
 
