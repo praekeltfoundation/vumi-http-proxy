@@ -6,10 +6,17 @@
 Welcome to Vumi HTTP Proxy's documentation!
 ===========================================
 
+Black & White listing HTTP Proxy for Vumi Sandbox HTTP requests
+
 Contents:
+=================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+
+   project-outline.rst
+   usage.rst
+   queen-of-ni.rst
 
 
 

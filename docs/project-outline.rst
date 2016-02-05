@@ -1,4 +1,4 @@
-Black & White-listing HTTP Proxy
+Project Outline
 ================================
 
 Vumi Go, the hosted Vumi environment, while being horizontally scalable and
@@ -23,18 +23,3 @@ resources, we need a proxy that intercepts these outbound HTTP calls and checks
 whether the calls to the specified resources are allowed or not. This boils down
 to maintaining a blacklist of disallowed HTTP resources and per request checking
 against the blacklist.
-
-People to poke: Simon de Haan (smn), Simon Cross (hodgestar), Justin van der
-Merwe (justinvdm), Jeremy Thurgood (jerith)
-
-
-Useful links
-------------
-
-* `Twisted from Scratch <https://twistedmatrix.com/documents/current/core/howto/tutorial/index.html>`_
-* `Introduction to Deferreds <https://twistedmatrix.com/documents/current/core/howto/defer-intro.html>`_
-* `Deferred Reference <https://twistedmatrix.com/documents/current/core/howto/defer.html>`_
-* `Getting Connected with Endpoints <https://twistedmatrix.com/documents/current/core/howto/endpoints.html>`_
-* `Python Documentation <https://docs.python.org/2/index.html>`_
-* `Twisted's simple built-in HTTP proxy <https://twistedmatrix.com/documents/current/api/twisted.web.proxy.html>`_
-* `Wikipedia overview of the HTTP protocol <https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol>`_
