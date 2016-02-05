@@ -14,11 +14,17 @@ from vumi_http_proxy import blacklist_reader
 
 
 class Options(usage.Options):
-    optParameters = [["port", None, 8080,
+    optParameters = [["port", None, "8080",
                      "The port number to start the proxy"],
                      ["interface", None, "0.0.0.0", "IP to start proxy on"],
                      ["blacklist", None, None,
                      "Name of the YAML config file for blacklist"]]
+
+    def postOptions(self):
+        try:
+            self["port"] = int(self["port"])
+        except (ValueError, TypeError):
+            raise usage.UsageError('Port must be an integer. Please try again')
 
 
 class ProxyWorkerServiceMaker(object):
@@ -32,4 +38,4 @@ class ProxyWorkerServiceMaker(object):
         factory = ProxyFactory(
             blacklist, client.createResolver(), Agent(reactor))
         return strports.service("tcp:%d:interface=%s" % (
-                options["port"], str(options["interface"])), factory)
+                options["port"], options["interface"]), factory)
