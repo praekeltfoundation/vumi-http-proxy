@@ -21,13 +21,13 @@ To build this locally::
 	$ source ve/bin/activate
 	(ve)$ pip install -e .
 
-To run using default configuration::
+To run using default ip and port configuration::
 
-	(ve)$ twistd -n vumi_http_proxy
+	(ve)$ twistd -n vumi_http_proxy --blacklist=BLACKLISTFILENAME
 
 Alternatively::
 
-	(ve)$ clickme
+	(ve)$ queen-of-ni --blacklist BLACKLISTFILENAME
 
 To run using manual configuration::
 
@@ -35,8 +35,8 @@ To run using manual configuration::
 
 Alternatively::
 
-	(ve)$ clickme --interface IPADDRESS --port PORTNO --blacklist BLACKLISTFILENAME
+	(ve)$ queen-of-ni --interface IPADDRESS --port PORTNO --blacklist BLACKLISTFILENAME
 
 For help::
 
-	(ve)$ clickme --help
+	(ve)$ queen-of-ni --help

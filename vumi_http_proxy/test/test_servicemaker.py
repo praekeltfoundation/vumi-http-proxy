@@ -10,17 +10,27 @@ class TestOptions(unittest.TestCase):
         options = Options()
         options.parseOptions([])
         self.assertEqual(options["port"], 8080)
-        self.assertEqual(str(options["interface"]), "0.0.0.0")
-        self.assertEqual(str(options["blacklist"]), "./docs/proxy_blacklist.yml")
+        self.assertEqual(options["interface"], "0.0.0.0")
+        self.assertEqual(options["blacklist"], None)
 
     def test_override(self):
         options = Options()
+        fake_blacklist = ["foo", "bar"]
+        filename = self.make_blacklist(fake_blacklist)
         options.parseOptions(["--port", 8000])
         options.parseOptions(["--interface", '127.0.0.1'])
-        options.parseOptions(["--blacklist", "fake_blacklist.yml"])
-        self.assertEqual(options["port"], 8000)
+        options.parseOptions(["--blacklist", filename])
+        self.assertEqual(options["port"], "8000")
         self.assertEqual(str(options["interface"]), "127.0.0.1")
-        self.assertEqual(str(options["blacklist"]), "fake_blacklist.yml")
+        self.assertEqual(str(options["blacklist"]), filename)
+
+    def make_blacklist(self, blacklist):
+        filename = self.mktemp()
+        with open(filename, 'w') as stream:
+            stream.write("proxy-blacklist:\n")
+            for ip_addr in blacklist:
+                stream.write(" - " + ip_addr + "\n")
+        return filename
 
 
 class TestProxyWorkerServiceMaker(unittest.TestCase):
