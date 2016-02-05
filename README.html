@@ -351,24 +351,25 @@ $ source ve/bin/activate
 </pre>
 <p>To run using default ip and port configuration:</p>
 <pre class="literal-block">
-(ve)$ twistd -n vumi_http_proxy --blacklist=BLACKLISTFILENAME
+(ve)$ twistd -n vumi_http_proxy --configfile=CONFIGFILENAME
 </pre>
 <p>Alternatively:</p>
 <pre class="literal-block">
-(ve)$ queen-of-ni --blacklist BLACKLISTFILENAME
+(ve)$ queen-of-ni --configfile CONFIGFILENAME
 </pre>
 <p>To run using manual configuration:</p>
 <pre class="literal-block">
-(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO --blacklist=BLACKLISTFILENAME
+(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO --configfile=CONFIGFILENAME
 </pre>
 <p>Alternatively:</p>
 <pre class="literal-block">
-(ve)$ queen-of-ni --interface IPADDRESS --port PORTNO --blacklist BLACKLISTFILENAME
+(ve)$ queen-of-ni --interface IPADDRESS --port PORTNO --configfile CONFIGFILENAME
 </pre>
 <p>For help:</p>
 <pre class="literal-block">
 (ve)$ queen-of-ni --help
 </pre>
+<p>For documentation, please see <a class="reference external" href="http://queen-of-ni.readthedocs.org/">http://queen-of-ni.readthedocs.org/</a></p>
 </div>
 </body>
 </html>

@@ -28,20 +28,22 @@ To build this locally::
 
 To run using default ip and port configuration::
 
-	(ve)$ twistd -n vumi_http_proxy --blacklist=BLACKLISTFILENAME
+	(ve)$ twistd -n vumi_http_proxy --configfile=CONFIGFILENAME
 
 Alternatively::
 
-	(ve)$ queen-of-ni --blacklist BLACKLISTFILENAME
+	(ve)$ queen-of-ni --configfile CONFIGFILENAME
 
 To run using manual configuration::
 
-	(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO --blacklist=BLACKLISTFILENAME
+	(ve)$ twistd -n vumi_http_proxy --interface=IPADDRESS --port=PORTNO --configfile=CONFIGFILENAME
 
 Alternatively::
 
-	(ve)$ queen-of-ni --interface IPADDRESS --port PORTNO --blacklist BLACKLISTFILENAME
+	(ve)$ queen-of-ni --interface IPADDRESS --port PORTNO --configfile CONFIGFILENAME
 
 For help::
 
 	(ve)$ queen-of-ni --help
+
+For documentation, please see http://queen-of-ni.readthedocs.org/
