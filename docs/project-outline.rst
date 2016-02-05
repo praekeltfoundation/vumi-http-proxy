@@ -23,3 +23,20 @@ resources, we need a proxy that intercepts these outbound HTTP calls and checks
 whether the calls to the specified resources are allowed or not. This boils down
 to maintaining a blacklist of disallowed HTTP resources and per request checking
 against the blacklist.
+
+And now for something completely different::
+
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄░░░░░░░░░
+░░░░░░░░▄▀░░░░░░░░░░░░▄░░░░░░░▀▄░░░░░░░
+░░░░░░░░█░░▄░░░░▄░░░░░░░░░░░░░░█░░░░░░░
+░░░░░░░░█░░░░░░░░░░░░▄█▄▄░░▄░░░█░▄▄▄░░░
+░▄▄▄▄▄░░█░░░░░░▀░░░░▀█░░▀▄░░░░░█▀▀░██░░
+░██▄▀██▄█░░░▄░░░░░░░██░░░░▀▀▀▀▀░░░░██░░
+░░▀██▄▀██░░░░░░░░▀░██▀░░░░░░░░░░░░░▀██░
+░░░░▀████░▀░░░░▄░░░██░░░▄█░░░░▄░▄█░░██░
+░░░░░░░▀█░░░░▄░░░░░██░░░░▄░░░▄░░▄░░░██░
+░░░░░░░▄█▄░░░░░░░░░░░▀▄░░▀▀▀▀▀▀▀▀░░▄▀░░
+░░░░░░█▀▀█████████▀▀▀▀████████████▀░░░░
+░░░░░░████▀░░███▀░░░░░░▀███░░▀██▀░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
