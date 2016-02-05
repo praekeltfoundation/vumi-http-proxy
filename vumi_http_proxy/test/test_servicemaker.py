@@ -20,7 +20,7 @@ class TestOptions(unittest.TestCase):
         options.parseOptions(["--port", 8000])
         options.parseOptions(["--interface", '127.0.0.1'])
         options.parseOptions(["--blacklist", filename])
-        self.assertEqual(options["port"], "8000")
+        self.assertEqual(options["port"], 8000)
         self.assertEqual(str(options["interface"]), "127.0.0.1")
         self.assertEqual(str(options["blacklist"]), filename)
 
