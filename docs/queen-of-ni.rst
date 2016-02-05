@@ -10,7 +10,11 @@ First, build this locally::
 	(ve)$ pip install -e .
 
 In order to run queen-of-ni a blacklist file must be specified. This must be a PyYAML configuration file - an example of which can 
-be found in ./docs/proxy_blacklist.yml
+be found below (./docs/proxy_blacklist.yml):
+
+.. literalinclude:: proxy_blacklist.yml
+    :language: yaml
+
 The default settings are::
 
 	IP address: 0.0.0.0
