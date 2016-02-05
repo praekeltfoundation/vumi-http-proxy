@@ -2,6 +2,7 @@
 from click.testing import CliRunner
 from vumi_http_proxy import queen_of_ni, http_proxy
 from twisted.trial import unittest
+import yaml
 
 
 class TestQueenOfNi(unittest.TestCase):
@@ -30,11 +31,8 @@ class TestQueenOfNi(unittest.TestCase):
 
     def make_config(self, blacklist, dnsservers):
         filename = self.mktemp()
+        filecont = yaml.safe_dump(
+            {"proxy-blacklist": blacklist, "dns-servers": dnsservers})
         with open(filename, 'w') as stream:
-            stream.write("proxy-blacklist:\n")
-            for ip_addr in blacklist:
-                stream.write(" - " + ip_addr + "\n")
-            stream.write("dns-servers:\n")
-            for server in dnsservers:
-                stream.write(" - " + str(server) + "\n")
+            stream.write(filecont)
         return filename

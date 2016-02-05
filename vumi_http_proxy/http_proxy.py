@@ -6,7 +6,6 @@ from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
-# blacklist of disallowed domains (move to proxy_blacklist.py)
 
 
 class ProxyFactory(http.HTTPFactory):
