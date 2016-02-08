@@ -6,6 +6,8 @@ from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
+from twisted.internet.ssl import ClientContextFactory
+from twisted.internet.protocol import Protocol, ClientFactory
 
 
 class ProxyFactory(http.HTTPFactory):
@@ -47,12 +49,15 @@ class CheckProxyRequest(proxy.ProxyRequest):
             self.write("<html>Denied</html>")
             self.finish()
             return
-        uri = self.replaceHostWithIP(self.uri, ip_addr)
-        headers = self.requestHeaders
-        d = self.channel.http_client.request(
-            self.method, uri, headers, StringProducer(self.content.read()))
-        d.addCallback(self.sendResponseBack)
-        return d
+        if self.method == 'CONNECT':
+            self.processConnectRequest()
+        else:
+            uri = self.replaceHostWithIP(self.uri, ip_addr)
+            headers = self.requestHeaders
+            d = self.channel.http_client.request(
+                self.method, uri, headers, StringProducer(self.content.read()))
+            d.addCallback(self.sendResponseBack)
+            return d
 
     def replaceHostWithIP(self, uri, ip_addr):
         scheme, netloc, path, params, query, fragment = urlparse(uri)
@@ -69,6 +74,86 @@ class CheckProxyRequest(proxy.ProxyRequest):
         body = yield readBody(r)
         self.write(body)
         self.finish()
+
+    def splitHostPort(self, hostport, default_port):
+        port = default_port
+        parts = hostport.split(':', 1)
+        try:
+            port = int(parts[1])
+        except ValueError:
+            self.write("Bad CONNECT Request",
+                       "Unable to parse port from URI: %s" % repr(self.uri))
+            self.finish()
+        return parts[0], port
+
+    def processConnectRequest(self):
+        parsed = urlparse(self.uri)
+        default_port = self.ports.get(parsed.scheme)
+        host, port = self.splitHostPort(parsed.netloc or parsed.path,
+                                        default_port)
+        clientFactory = ConnectProxyClientFactory(host, port, self)
+        self.reactor.connectTCP(host, port, clientFactory)
+
+
+class ConnectProxy(proxy.Proxy):
+    """HTTP Server Protocol that supports CONNECT"""
+    requestFactory = CheckProxyRequest
+    connectedRemote = None
+
+    def requestDone(self, request):
+        if request.method == 'CONNECT' and self.connectedRemote is not None:
+            self.connectedRemote.connectedClient = self
+        else:
+            Proxy.requestDone(self, request)
+
+    def connectionLost(self, reason):
+        if self.connectedRemote is not None:
+            self.connectedRemote.transport.loseConnection()
+        Proxy.connectionLost(self, reason)
+
+    def dataReceived(self, data):
+        if self.connectedRemote is None:
+            Proxy.dataReceived(self, data)
+        else:
+            # Once proxy is connected, forward all bytes received
+            # from the original client to the remote server.
+            self.connectedRemote.transport.write(data)
+
+
+class ConnectProxyClient(Protocol):
+    connectedClient = None
+
+    def connectionMade(self):
+        self.factory.request.channel.connectedRemote = self
+        self.factory.request.setResponseCode(200, "CONNECT OK")
+        self.factory.request.setHeader('X-Connected-IP',
+                                       self.transport.realAddress[0])
+        self.factory.request.setHeader('Content-Length', '0')
+        self.factory.request.finish()
+
+    def connectionLost(self, reason):
+        if self.connectedClient is not None:
+            self.connectedClient.transport.loseConnection()
+
+    def dataReceived(self, data):
+        if self.connectedClient is not None:
+            # Forward all bytes from the remote server back to the
+            # original connected client
+            self.connectedClient.transport.write(data)
+        else:
+            log.msg("UNEXPECTED DATA RECEIVED:", data)
+
+
+class ConnectProxyClientFactory(ClientFactory):
+    protocol = ConnectProxyClient
+
+    def __init__(self, host, port, request):
+        self.request = request
+        self.host = host
+        self.port = port
+
+    def clientConnectionFailed(self, connector, reason):
+        self.request.fail("Gateway Error", str(reason))
 
 
 class StringProducer(object):
@@ -96,6 +181,11 @@ class Proxy(proxy.Proxy):
         self.blacklist = blacklist
         self.resolver = resolver
         self.http_client = http_client
+
+
+class WebClientContextFactory(ClientContextFactory):
+    def getContext(self, hostname, port):
+        return ClientContextFactory.getContext(self)
 
 
 class Initialize(object):
