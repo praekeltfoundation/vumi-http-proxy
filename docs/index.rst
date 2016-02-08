@@ -19,7 +19,7 @@ Contents:
    queen-of-ni.rst
    http-proxy.rst
 
-.. automodule:: vumi-http-proxy.http_proxy
+.. automodule:: vumi-http-proxy
 	:members:
 
 

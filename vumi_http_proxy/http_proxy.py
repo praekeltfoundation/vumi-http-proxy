@@ -105,10 +105,12 @@ class Proxy(proxy.Proxy):
 
 
 class Initialize(object):
-    """This class initialises the proxy based on the configuration specified
+    """
+    This class initialises the proxy based on the configuration specified
     """
     def __init__(self, blacklist, dnsservers, ip, port):
-        """ :param blacklist: List of disallowed ip addresses.
+        """
+        :param blacklist: List of disallowed ip addresses.
         :type blacklist: list
         :param dnservers: List of manual dns servers to use.
         :type dnsservers: list
