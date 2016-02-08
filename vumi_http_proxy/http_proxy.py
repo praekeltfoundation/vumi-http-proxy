@@ -81,11 +81,13 @@ class CheckProxyRequest(proxy.ProxyRequest):
 
     def processConnectRequest(self):
         parsed = urlparse(self.uri)
-        print parsed
         host, port = self.splitHostPort(parsed.netloc or parsed.path)
-        d = self.channel.https_client.request("GET", host)
-        d.addCallbacks(self.printResponse, log.err)
-        d.addCallback(lambda ignored: reactor.stop())
+        host = "https://" + host + "/"
+        # is this necessary?
+        print host
+        d = self.channel.https_client.request(
+            "GET", host)
+        d.addCallback(self.sendResponseBack)
         return d
 
     def splitHostPort(self, hostport):
