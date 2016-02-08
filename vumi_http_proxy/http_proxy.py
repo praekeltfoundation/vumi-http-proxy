@@ -27,7 +27,12 @@ class ProxyFactory(http.HTTPFactory):
 
 
 class CheckProxyRequest(proxy.ProxyRequest):
+    """
+    Receives request, processes request and returns response
+    """
     def process(self):
+        """ Attain hostname, return deferred on resolver.getHostByName
+        """
         host, _, port = self.getAllHeaders()['host'].partition(':')
         d = self.channel.resolver.getHostByName(host)
         d.addCallback(self.setIP, host)
@@ -42,6 +47,9 @@ class CheckProxyRequest(proxy.ProxyRequest):
         return
 
     def setIP(self, ip_addr, host):
+        """
+        Process corresponding ip address to allow or deny.
+        """
         if not ip_addr:
             self.setResponseCode(400)
             self.write("<html>ERROR: No IP adresses found for name %r" %
@@ -61,6 +69,9 @@ class CheckProxyRequest(proxy.ProxyRequest):
         return d
 
     def replaceHostWithIP(self, uri, ip_addr):
+        """
+        Parse request to find host, replace with IP and port (if applicable).
+        """
         scheme, netloc, path, params, query, fragment = urlparse(uri)
         _, _, port = netloc.partition(':')
         if port:
@@ -69,6 +80,9 @@ class CheckProxyRequest(proxy.ProxyRequest):
 
     @inlineCallbacks
     def sendResponseBack(self, r):
+        """
+        Fetch response and response code, send to client.
+        """
         self.setResponseCode(r.code)
         for key, value in r.headers.getAllRawHeaders():
             self.responseHeaders.addRawHeader(key, value)
@@ -78,6 +92,9 @@ class CheckProxyRequest(proxy.ProxyRequest):
 
 
 class StringProducer(object):
+    """
+    Parse response body.
+    """
     def __init__(self, body):
         self.body = body
         self.length = len(body)
@@ -94,7 +111,9 @@ class StringProducer(object):
 
 
 class Proxy(proxy.Proxy):
-
+    """
+    Start proxy with CheckProxyRequest as requestFactory.
+    """
     requestFactory = CheckProxyRequest
 
     def __init__(self, blacklist, resolver, http_client):
@@ -109,6 +128,12 @@ class Initialize(object):
     This class initialises the proxy based on the configuration specified
     """
     def __init__(self, blacklist, dnsservers, ip, port):
+        self.blacklist = blacklist
+        self.dnsservers = dnsservers
+        self.ip = ip
+        self.port = port
+
+    def main(self):
         """
         :param blacklist: List of disallowed ip addresses.
         :type blacklist: list
@@ -119,13 +144,6 @@ class Initialize(object):
         :param port: Port of server to initialize proxy
         :type port: int
         """
-        self.blacklist = blacklist
-        self.dnsservers = dnsservers
-        self.ip = ip
-        self.port = port
-
-    def main(self):
-
         resolver = client.createResolver(self.dnsservers)
         http_client = Agent(reactor)
         factory = ProxyFactory(self.blacklist, resolver, http_client)
