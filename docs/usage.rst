@@ -36,3 +36,7 @@ To run using manual configuration::
 For hints and a list of all available commands, please see::
 	
 	(ve)$ twistd -n vumi_http_proxy --help
+
+.. warning::
+
+   This version does not yet support HTTPS requests

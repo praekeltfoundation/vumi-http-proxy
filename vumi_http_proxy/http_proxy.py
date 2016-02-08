@@ -1,3 +1,9 @@
+"""Proxy generator to resolve and check client HTTP requests
+
+.. moduleauthor:: Carla Wilby <thisiscarlawilby@gmail.com>
+
+"""
+
 from twisted.python import log
 from twisted.web import http, proxy
 from twisted.internet import reactor
@@ -99,13 +105,25 @@ class Proxy(proxy.Proxy):
 
 
 class Initialize(object):
+    """This class initialises the proxy based on the configuration specified
+    """
     def __init__(self, blacklist, dnsservers, ip, port):
+        """ :param blacklist: List of disallowed ip addresses.
+        :type blacklist: list
+        :param dnservers: List of manual dns servers to use.
+        :type dnsservers: list
+        :param ip: Address of server to initialize proxy
+        :type ip: str
+        :param port: Port of server to initialize proxy
+        :type port: int
+        """
         self.blacklist = blacklist
         self.dnsservers = dnsservers
         self.ip = ip
         self.port = port
 
     def main(self):
+
         resolver = client.createResolver(self.dnsservers)
         http_client = Agent(reactor)
         factory = ProxyFactory(self.blacklist, resolver, http_client)

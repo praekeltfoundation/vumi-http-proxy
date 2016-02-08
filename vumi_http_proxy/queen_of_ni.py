@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+"""Click command line interface to launch vumi-http-proxy
+    Specify: interface: default 0.0.0.0
+             port: default 8080
+             configfile: default None
+
+.. moduleauthor:: Carla Wilby <thisiscarlawilby@gmail.com>
+
+"""
+
 import click
 from vumi_http_proxy import http_proxy
 from vumi_http_proxy import config_reader

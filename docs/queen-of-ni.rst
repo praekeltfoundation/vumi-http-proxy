@@ -32,3 +32,7 @@ Otherwise to use manual configuration, run::
 For help, see::
 
 	(ve)$ queen-of-ni --help
+
+.. warning::
+
+   This version does not yet support HTTPS requests

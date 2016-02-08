@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+"""Twistd plugin to launch vumi-http-proxy
+    Specify: interface: default 0.0.0.0
+             port: default 8080
+             configfile: default None
+
+.. moduleauthor:: Carla Wilby <thisiscarlawilby@gmail.com>
+
+"""
+
 from zope.interface import implements
 
 from twisted.python import usage
