@@ -20,8 +20,10 @@ from vumi_http_proxy import config_reader
 @click.option('--configfile', default=None,
               help='example file: ./docs/proxy_config.yml')
 def cli(interface, port, configfile):
-    """This script runs vumi-http-proxy on <interface>:<port>
-    with the specified blacklist"""
+    """
+    This script runs vumi-http-proxy on <interface>:<port>
+    with the specified blacklist
+    """
     blacklist, dns_servers = config_reader.read_config(configfile)
     interface = str(interface)
     click.echo("Starting connection to %s:%d" % (interface, port))

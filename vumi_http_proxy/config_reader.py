@@ -11,6 +11,9 @@ from twisted.python import log
 
 
 def read_config(configfile):
+    """
+    Retrieve content from configuration file as blacklist and dns servers lists
+    """
     blacklist = []
     dns_servers = []
     if not configfile:

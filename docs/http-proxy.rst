@@ -39,19 +39,14 @@ queen-of-ni Module
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule:: vumi_http_proxy.queen_of_ni
-    :members:
 
-.. autoclass:: cli
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autofunction:: cli
 
 
 servicemaker Module
 ^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: vumi_http_proxy.servicemaker
-    :members:
 
 .. autoclass:: Options
     :members:
@@ -68,4 +63,7 @@ config_reader Module
 ^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: vumi_http_proxy.config_reader
-    :members:
+
+.. autofunction:: read_config
+
+.. autofunction:: parse_servers
