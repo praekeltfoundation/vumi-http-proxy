@@ -6,7 +6,6 @@ from twisted.names import client
 from twisted.web.client import Agent, readBody
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
-from twisted.internet.ssl import ClientContextFactory
 from twisted.internet.protocol import Protocol, ClientFactory
 
 
@@ -181,11 +180,6 @@ class Proxy(proxy.Proxy):
         self.blacklist = blacklist
         self.resolver = resolver
         self.http_client = http_client
-
-
-class WebClientContextFactory(ClientContextFactory):
-    def getContext(self, hostname, port):
-        return ClientContextFactory.getContext(self)
 
 
 class Initialize(object):
