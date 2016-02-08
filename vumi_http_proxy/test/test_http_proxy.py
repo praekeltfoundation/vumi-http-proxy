@@ -17,7 +17,8 @@ class TestCheckProxyRequest(unittest.TestCase):
     def setup_proxy(self, blacklist):
         resolver = helpers.TestResolver()
         http_client = helpers.TestAgent()
-        proxy = ProxyFactory(blacklist, resolver, http_client)
+        https_client = helpers.TestProxyAgent()
+        proxy = ProxyFactory(blacklist, resolver, http_client, https_client)
         server_endpoint = serverFromString(
             reactor, "tcp:0:interface=127.0.0.1")
         self.server = yield server_endpoint.listen(proxy)

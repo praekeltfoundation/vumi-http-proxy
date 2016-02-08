@@ -7,10 +7,11 @@ from twisted.plugin import IPlugin
 from twisted.application.service import IServiceMaker
 from twisted.application import strports
 from twisted.names import client
-from twisted.web.client import Agent
+from twisted.web.client import Agent, ProxyAgent
 from twisted.internet import reactor
 from vumi_http_proxy.http_proxy import ProxyFactory
 from vumi_http_proxy import config_reader
+from twisted.internet.endpoints import TCP4ClientEndpoint
 
 
 class Options(usage.Options):
@@ -35,7 +36,10 @@ class ProxyWorkerServiceMaker(object):
 
     def makeService(self, options):
         blacklist = config_reader.read_config(options["configfile"])
+        endpoint = TCP4ClientEndpoint(
+            reactor, options["port"], options["interface"])
         factory = ProxyFactory(
-            blacklist, client.createResolver(), Agent(reactor))
+            blacklist, client.createResolver(), Agent(reactor),
+            ProxyAgent(endpoint))
         return strports.service("tcp:%d:interface=%s" % (
                 options["port"], options["interface"]), factory)
