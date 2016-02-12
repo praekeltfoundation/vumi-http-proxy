@@ -9,7 +9,7 @@ with open('README.rst') as readme_file:
 
 setup(
     name="vumi-http-proxy",
-    version="0.1",
+    version="0.1.1",
     description=(
         "HTTP Proxy in Python Twisted to prevent unauthorized access to "
         "blacklisted ips"),
