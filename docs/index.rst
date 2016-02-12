@@ -12,12 +12,15 @@ Contents:
 =================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    project-outline.rst
    usage.rst
    queen-of-ni.rst
+   http-proxy.rst
 
+.. automodule:: vumi-http-proxy
+	:members:
 
 
 Indices and tables

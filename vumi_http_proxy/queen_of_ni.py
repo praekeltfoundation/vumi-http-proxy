@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+"""Click command line interface to launch vumi-http-proxy
+    Specify: interface: default 0.0.0.0
+             port: default 8080
+             configfile: default None
+
+.. moduleauthor:: Carla Wilby <thisiscarlawilby@gmail.com>
+
+"""
+
 import click
 from vumi_http_proxy import http_proxy
 from vumi_http_proxy import config_reader
@@ -11,8 +20,10 @@ from vumi_http_proxy import config_reader
 @click.option('--configfile', default=None,
               help='example file: ./docs/proxy_config.yml')
 def cli(interface, port, configfile):
-    """This script runs vumi-http-proxy on <interface>:<port>
-    with the specified blacklist"""
+    """
+    This script runs vumi-http-proxy on <interface>:<port>
+    with the specified blacklist
+    """
     blacklist, dns_servers = config_reader.read_config(configfile)
     interface = str(interface)
     click.echo("Starting connection to %s:%d" % (interface, port))

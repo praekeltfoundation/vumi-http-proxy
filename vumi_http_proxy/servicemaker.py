@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+"""Twistd plugin to launch vumi-http-proxy
+    Specify: interface: default 0.0.0.0
+             port: default 8080
+             configfile: default None
+
+.. moduleauthor:: Carla Wilby <thisiscarlawilby@gmail.com>
+
+"""
+
 from zope.interface import implements
 
 from twisted.python import usage
@@ -21,6 +30,9 @@ class Options(usage.Options):
                      "Name of the YAML config file for blacklist and servers"]]
 
     def postOptions(self):
+        """
+        Check that entered port parses to an integer
+        """
         try:
             self["port"] = int(self["port"])
         except (ValueError, TypeError):
@@ -34,6 +46,9 @@ class ProxyWorkerServiceMaker(object):
     options = Options
 
     def makeService(self, options):
+        """
+        Start module with given configuration
+        """
         blacklist = config_reader.read_config(options["configfile"])
         factory = ProxyFactory(
             blacklist, client.createResolver(), Agent(reactor))
