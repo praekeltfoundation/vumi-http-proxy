@@ -27,6 +27,7 @@ setup(
         'Click',
         'Twisted',
         'PyYAML',
+        'service_identity',
     ],
     entry_points='''
         [console_scripts]

@@ -9,21 +9,24 @@ from twisted.web import http, proxy
 from twisted.internet import reactor
 from twisted.internet.endpoints import serverFromString
 from twisted.names import client
-from twisted.web.client import Agent, readBody
+from twisted.web.client import Agent, readBody, ProxyAgent
 from urlparse import urlparse, urlunparse
 from twisted.internet.defer import inlineCallbacks, succeed
+from twisted.internet.endpoints import TCP4ClientEndpoint
 
 
 class ProxyFactory(http.HTTPFactory):
 
-    def __init__(self, blacklist, resolver, http_client):
+    def __init__(self, blacklist, resolver, http_client, https_client):
         http.HTTPFactory.__init__(self)
         self.blacklist = blacklist
         self.resolver = resolver
         self.http_client = http_client
+        self.https_client = https_client
 
     def buildProtocol(self, addr):
-        return Proxy(self.blacklist, self.resolver, self.http_client)
+        return Proxy(
+            self.blacklist, self.resolver, self.http_client, self.https_client)
 
 
 class CheckProxyRequest(proxy.ProxyRequest):
@@ -61,12 +64,15 @@ class CheckProxyRequest(proxy.ProxyRequest):
             self.write("<html>Denied</html>")
             self.finish()
             return
-        uri = self.replaceHostWithIP(self.uri, ip_addr)
-        headers = self.requestHeaders
-        d = self.channel.http_client.request(
-            self.method, uri, headers, StringProducer(self.content.read()))
-        d.addCallback(self.sendResponseBack)
-        return d
+        if self.method == 'CONNECT':
+            self.processConnectRequest()
+        else:
+            uri = self.replaceHostWithIP(self.uri, ip_addr)
+            headers = self.requestHeaders
+            d = self.channel.http_client.request(
+                self.method, uri, headers, StringProducer(self.content.read()))
+            d.addCallback(self.sendResponseBack)
+            return d
 
     def replaceHostWithIP(self, uri, ip_addr):
         """
@@ -89,6 +95,30 @@ class CheckProxyRequest(proxy.ProxyRequest):
         body = yield readBody(r)
         self.write(body)
         self.finish()
+
+    def printResponse(response):
+        print response
+
+    def processConnectRequest(self):
+        parsed = urlparse(self.uri)
+        host, port = self.splitHostPort(parsed.netloc or parsed.path)
+        host = "https://" + host + "/"
+        # is this necessary?
+        print host
+        d = self.channel.https_client.request(
+            "GET", host)
+        d.addCallback(self.sendResponseBack)
+        return d
+
+    def splitHostPort(self, hostport):
+        parts = hostport.split(':', 1)
+        try:
+            port = int(parts[1])
+            return parts[0], port
+        except ValueError:
+            self.write("Bad CONNECT Request",
+                       "Unable to parse port from URI: %s" % repr(self.uri))
+            self.finish()
 
 
 class StringProducer(object):
@@ -116,11 +146,12 @@ class Proxy(proxy.Proxy):
     """
     requestFactory = CheckProxyRequest
 
-    def __init__(self, blacklist, resolver, http_client):
+    def __init__(self, blacklist, resolver, http_client, https_client):
         proxy.Proxy.__init__(self)
         self.blacklist = blacklist
         self.resolver = resolver
         self.http_client = http_client
+        self.https_client = https_client
 
 
 class Initialize(object):
@@ -146,7 +177,10 @@ class Initialize(object):
         """
         resolver = client.createResolver(self.dnsservers)
         http_client = Agent(reactor)
-        factory = ProxyFactory(self.blacklist, resolver, http_client)
+        endpnt = TCP4ClientEndpoint(reactor, self.port, self.ip)
+        https_client = ProxyAgent(endpnt)
+        factory = ProxyFactory(
+            self.blacklist, resolver, http_client, https_client)
         endpoint = serverFromString(
             reactor, "tcp:%d:interface=%s" % (self.port, self.ip))
         endpoint.listen(factory)

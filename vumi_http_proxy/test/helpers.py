@@ -66,3 +66,9 @@ class TestAgent(object):
     def request(self, method, uri, headers, bodyProducer):
         response = MockResponse(200, "<html>Allowed</html>")
         return succeed(response)
+
+
+class TestProxyAgent(object):
+    def request(self, method, uri):
+        response = MockResponse(200, "<html>Allowed</html>")
+        return succeed(response)
